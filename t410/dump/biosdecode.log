@@ -1,0 +1,52 @@
+# biosdecode 3.3
+VPD present.
+	BIOS Build ID: 6IET65WW 
+	Box Serial Number: R8X10CE
+	Motherboard Serial Number: 1ZJDM11S5SA
+	Machine Type/Model: 2539BG4
+SMBIOS 2.6 present.
+	Structure Table Length: 2838 bytes
+	Structure Table Address: 0x000E0010
+	Number Of Structures: 78
+	Maximum Structure Size: 127 bytes
+BIOS32 Service Directory present.
+	Revision: 0
+	Calling Interface Address: 0x000FDBE0
+ACPI 2.0 present.
+	OEM Identifier: LENOVO
+	RSD Table 32-bit Address: 0xBB7EF2CC
+	XSD Table 64-bit Address: 0x00000000BB7EF338
+Intel Multiprocessor present.
+	Specification Revision: 1.4
+	Configuration Table Address: 0x0009EF71
+	Mode: Virtual Wire
+PNP BIOS 1.0 present.
+	Event Notification: Not Supported
+	Real Mode 16-bit Code Address: E172:067A
+	Real Mode 16-bit Data Address: 0040:0000
+	16-bit Protected Mode Code Address: 0x000F9894
+	16-bit Protected Mode Data Address: 0x00000400
+PCI Interrupt Routing 1.0 present.
+	Router Device: ff:1f.7
+	Exclusive IRQs: None
+	Compatible Router: 8086:122e
+	Device: 00:00, on-board
+	Device: 00:02, on-board
+	Device: 00:03, on-board
+	Device: 00:01, on-board
+	Device: 01:00, on-board
+	Device: 00:16, on-board
+	Device: 00:18, on-board
+	Device: 00:19, on-board
+	Device: 00:1a, on-board
+	Device: 00:1b, on-board
+	Device: 00:1c, on-board
+	Device: 00:1d, on-board
+	Device: 00:1e, on-board
+	Device: 00:1f, on-board
+	Device: 02:00, slot 1
+	Device: 03:00, slot 2
+	Device: 04:00, slot 3
+	Device: 05:00, slot 4
+	Device: 05:1f, on-board
+	Device: 0d:00, on-board
