@@ -3,14 +3,15 @@
 
 source ./common/variables.sh
 
+# part no.1
 # check for running docker
 if ! docker info > /dev/null 2>&1; then
 	echo "Docker is missing..."
-  echo "This script uses docker, and if it isn't running - please start docker and try again!"
-  exit 1
+	echo "This script uses docker, and if it isn't running - please start docker and try again!"
+	exit 1
 fi
-echo "Docker is up..."
 
+# part no.2
 # check if docker image coreboot-sdk is created
 DOCKER_IMAGE_ID=$( docker images --format "{{.ID}}" --filter=reference=$DOCKER_CONTAINER_NAME )
 
@@ -25,7 +26,8 @@ if [ "$( docker container inspect -f '{{.State.Status}}' $DOCKER_CONTAINER_NAME 
 	echo $DOCKER_CONTAINER_ID
 fi
 
-	echo "Entering to Docker"
+# part no.3
+# entering into docker powered sdk, input is compile script
 
 docker run --rm --privileged \
 	-p 4500:4500 \
@@ -34,11 +36,23 @@ docker run --rm --privileged \
 	-w $DOCKER_ROOT_DIR \
 	$DOCKER_CONTAINER_NAME \
 	./prj/common/compile.sh
+
+echo "build.sh is done"
 	
-	echo "Exiting from Docker"
-	echo $MAINBOARD $DOCKER_ROOT_DIR $PWD
-	echo "build.sh is done"
-exit
+exit 0
+
+#####################
+##   Post build    ##
+#####################
+if [ ! -f "$DOCKER_COREBOOT_DIR/build/coreboot.rom" ]; then
+  echo "Uh oh. Things did not go according to plan."
+  exit 1;
+else
+  mv "$DOCKER_COREBOOT_DIR/build/coreboot.rom" "$DOCKER_COREBOOT_DIR/coreboot_$MAINBOARD-$MODEL-complete.rom"
+  sha256sum "$DOCKER_COREBOOT_DIR/coreboot_$MAINBOARD-$MODEL-complete.rom" > "$DOCKER_COREBOOT_DIR/coreboot_$MAINBOARD-$MODEL-complete.rom.sha256"
+fi
+
+
 
 # shellcheck disable=SC1091
 
