@@ -37,21 +37,26 @@ docker run --rm --privileged \
 	$DOCKER_CONTAINER_NAME \
 	./prj/common/compile.sh
 
-echo "build.sh is done"
+
 	
 exit 0
 
+# part no.4
 #####################
 ##   Post build    ##
 #####################
+## copy compilation results to out DIR, save config file
 if [ ! -f "$DOCKER_COREBOOT_DIR/build/coreboot.rom" ]; then
-  echo "Uh oh. Things did not go according to plan."
-  exit 1;
+	echo "coreboot.rom as output of compile is missing..."
+	exit 4;
 else
-  mv "$DOCKER_COREBOOT_DIR/build/coreboot.rom" "$DOCKER_COREBOOT_DIR/coreboot_$MAINBOARD-$MODEL-complete.rom"
-  sha256sum "$DOCKER_COREBOOT_DIR/coreboot_$MAINBOARD-$MODEL-complete.rom" > "$DOCKER_COREBOOT_DIR/coreboot_$MAINBOARD-$MODEL-complete.rom.sha256"
+	mkdir -p $DOCKER_ROOT_DIR/prj/out
+	mv "$DOCKER_COREBOOT_DIR/build/coreboot.rom" "$DOCKER_ROOT_DIR/prj/out/coreboot.rom"
+	mv "$DOCKER_COREBOOT_DIR/build/.config" "$DOCKER_ROOT_DIR/prj/out/coreboot.config"
 fi
 
+echo "build.sh is done"
+exit 0
 
 
 # shellcheck disable=SC1091
@@ -105,13 +110,3 @@ fi
 ##############################
 configAndMake
 
-#####################
-##   Post build    ##
-#####################
-if [ ! -f "$DOCKER_COREBOOT_DIR/build/coreboot.rom" ]; then
-  echo "Uh oh. Things did not go according to plan."
-  exit 1;
-else
-  mv "$DOCKER_COREBOOT_DIR/build/coreboot.rom" "$DOCKER_COREBOOT_DIR/coreboot_$MAINBOARD-$MODEL-complete.rom"
-  sha256sum "$DOCKER_COREBOOT_DIR/coreboot_$MAINBOARD-$MODEL-complete.rom" > "$DOCKER_COREBOOT_DIR/coreboot_$MAINBOARD-$MODEL-complete.rom.sha256"
-fi
