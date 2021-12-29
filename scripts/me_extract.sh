@@ -43,7 +43,6 @@ if [ ! -f "$DOCKER_COREBOOT_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/gbe.b
   rm flashregion_1_bios.bin
 fi
 
-echo $MAINBOARD $DOCKER_ROOT_DIR $PWD
 echo "ME extractor is done"
 
 exit

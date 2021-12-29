@@ -1,7 +1,7 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-3.0+
 
-source ./common/variables.sh
+source ./scripts/variables.sh
 
 # part no.1
 # check for running docker
@@ -28,14 +28,26 @@ fi
 
 # part no.3
 # entering into docker powered sdk, input is compile script
+if [ ! -d "$PROJECT_COREBOOT_BUILD_DIR" ]; then
+  mkdir "$PROJECT_COREBOOT_BUILD_DIR"
+elif [ "$CLEAN_SLATE" ]; then
+  rm -rf "$PROJECT_COREBOOT_BUILD_DIR" || true
+  mkdir "$PROJECT_COREBOOT_BUILD_DIR"
+fi
 
+## Run Docker
 docker run --rm --privileged \
 	-p 4500:4500 \
 	-v /dev/bus/usb:/dev/bus/usb \
-	-v $PWD:$DOCKER_ROOT_DIR/prj \
+	-v $PWD:$DOCKER_PROJECT_DIR \
+	-v "$PWD/$PROJECT_STOCK_BIOS_DIR:$DOCKER_STOCK_BIOS_DIR:ro" \
+	-v "$PWD/$PROJECT_COREBOOT_BUILD_DIR:$DOCKER_COREBOOT_BUILD_DIR" \
 	-w $DOCKER_ROOT_DIR \
 	$DOCKER_CONTAINER_NAME \
-	./prj/common/compile.sh
+	$DOCKER_SCRIPT_DIR/compile.sh
+
+#	--user "$(id -u):$(id -g)" \
+
 
 # part no.4
 #####################
