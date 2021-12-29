@@ -37,10 +37,6 @@ docker run --rm --privileged \
 	$DOCKER_CONTAINER_NAME \
 	./prj/common/compile.sh
 
-
-	
-exit 0
-
 # part no.4
 #####################
 ##   Post build    ##
