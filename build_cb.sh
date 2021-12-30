@@ -1,33 +1,73 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-3.0+
 
+# to show where in script the error is
+set -e
+
+# import variables
 source ./scripts/variables.sh
 
+
+## Help menu
+usage()
+{
+  echo "Usage: "
+  echo
+  echo "  $0 [-t <TAG>] [-c <COMMIT>] [--config] [--bleeding-edge] [--clean-slate] <model>"
+  echo
+  echo "  --bleeding-edge              Build from the latest commit"
+  echo "  --clean-slate                Purge previous build directory and config"
+  echo "  -c, --commit <commit>        Git commit hash"
+  echo "  --flash                      Flash BIOS if build is successful"
+  echo "  -h, --help                   Show this help"
+  echo "  -i, --config                 Execute with interactive make config"
+  echo "  -t, --tag <tag>              Git tag/version"
+  echo
+  echo "If a tag, commit or bleeding-edge flag is not given, the latest Coreboot release will be built."
+  echo
+  echo
+  echo "Available models:"
+  for AVAILABLE_MODEL in $AVAILABLE_MODELS; do
+      echo "$(printf '\t')$AVAILABLE_MODEL"
+  done
+}
+
+## Iterate through command line parameters
+while :
+do
+    case "$1" in
+      --bleeding-edge)
+        COREBOOT_COMMIT="master"
+        shift 1;;
+      --clean-slate)
+        CLEAN_SLATE=true
+        shift 1;;
+      -c | --commit)
+        COREBOOT_COMMIT="$2"
+        shift 2;;
+      --flash)
+        FLASH_AFTER_BUILD=true
+        shift 1;;
+      -h | --help)
+        usage
+        exit 0;;
+      -i | --config)
+        COREBOOT_CONFIG=true
+        shift 1;;
+      -t | --tag)
+        COREBOOT_TAG="$2"
+        shift 2;;
+      -*)
+        echo "Error: Unknown option: $1" >&2
+        usage >&2
+        exit 1;;
+      *)
+        break;;
+    esac
+done
+
 # part no.1
-# check for running docker
-if ! docker info > /dev/null 2>&1; then
-	echo "Docker is missing..."
-	echo "This script uses docker, and if it isn't running - please start docker and try again!"
-	exit 1
-fi
-
-# part no.2
-# check if docker image coreboot-sdk is created
-DOCKER_IMAGE_ID=$( docker images --format "{{.ID}}" --filter=reference=$DOCKER_CONTAINER_NAME )
-
-# ak nie, potom vytvorí image cez github
-echo $DOCKER_IMAGE_ID
-
-# zisti ci kontajner je spusteny, ak nie spusti ho
-DOCKER_CONTAINER_ID=$( docker ps --format "{{.ID}}" --filter ancestor=$DOCKER_CONTAINER_NAME )
-
-if [ "$( docker container inspect -f '{{.State.Status}}' $DOCKER_CONTAINER_NAME )" == "running" ]; then 
-	echo "coreboot_sdk is not running..."
-	echo $DOCKER_CONTAINER_ID
-fi
-
-# part no.3
-# entering into docker powered sdk, input is compile script
+# check for build DIR
 if [ ! -d "$PROJECT_COREBOOT_BUILD_DIR" ]; then
   mkdir "$PROJECT_COREBOOT_BUILD_DIR"
 elif [ "$CLEAN_SLATE" ]; then
@@ -35,8 +75,23 @@ elif [ "$CLEAN_SLATE" ]; then
   mkdir "$PROJECT_COREBOOT_BUILD_DIR"
 fi
 
-## Run Docker
+# part no.2
+# check fot Docker sdk, prepare sdk
+$PROJECT_SCRIPT_DIR/build_sdk.sh 
+
+if [[ $? -ne 0  ]]; then
+	echo "build_sdk.sh exit nonzero"
+	exit 1
+fi
+echo "build_sdk.sh exit zero"
+exit 1
+# part no.3
+# entering into docker powered sdk, input is compile script
+
+
+## Run Docker build_sdk
 docker run --rm --privileged \
+	--user "$(id -u):$(id -g)" \
 	-p 4500:4500 \
 	-v /dev/bus/usb:/dev/bus/usb \
 	-v $PWD:$DOCKER_PROJECT_DIR \
@@ -46,7 +101,7 @@ docker run --rm --privileged \
 	$DOCKER_CONTAINER_NAME \
 	$DOCKER_SCRIPT_DIR/compile.sh
 
-#	--user "$(id -u):$(id -g)" \
+
 
 
 # part no.4

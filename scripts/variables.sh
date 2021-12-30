@@ -15,7 +15,7 @@ export STOCK_BIOS_ROM="stock_bios.bin"
 export COREBOOT_SDK_VERSION="2021-04-06_7014f8258e"
 
 # docker tree
-export DOCKER_ROOT_DIR="/home/coreboot"
+export DOCKER_ROOT_DIR="/home/sdk"
 export DOCKER_PROJECT_DIR="$DOCKER_ROOT_DIR/prj"
 export DOCKER_SCRIPT_DIR="$DOCKER_PROJECT_DIR/scripts"
 export DOCKER_APP_DIR="$DOCKER_PROJECT_DIR/$MODEL"
