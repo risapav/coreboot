@@ -1,6 +1,8 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-3.0+
 	
+	set -e
+	echo "Entering prebuild.sh"
 	######################
   ##   Copy config   ##
   ######################
@@ -41,6 +43,7 @@ make savedefconfig
   fi
 
 pwd
-echo "prebuild.sh is done"
+
+echo "Exiting prebuild.sh"
 
 exit

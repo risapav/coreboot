@@ -1,6 +1,8 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-3.0+
 
+set -e
+echo "Entering compile.sh"
 ################################################################################
 ## VARIABLES
 ################################################################################
@@ -21,18 +23,7 @@ echo "Build coreboot..."
 make 
 
 
-
-
-
-
-
-
-
-
-
-echo $MAINBOARD $DOCKER_ROOT_DIR $PWD
-echo "Compile is done"
-
+echo "Exiting compile.sh"
 exit
 
 #!/bin/bash

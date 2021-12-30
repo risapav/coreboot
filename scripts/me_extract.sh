@@ -1,7 +1,8 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-3.0+
 
-
+set -e
+echo "Entering me_extract.sh"
 #######################
 ##   build ifdtool   ##
 #######################

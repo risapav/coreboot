@@ -4,6 +4,7 @@
 # to show where in script the error is
 set -e
 
+echo "Entering build.sh"
 # import variables
 source ./scripts/variables.sh
 
@@ -68,15 +69,17 @@ done
 
 # part no.1
 # check for build DIR
+echo "part 1"
 if [ ! -d "$PROJECT_COREBOOT_BUILD_DIR" ]; then
   mkdir "$PROJECT_COREBOOT_BUILD_DIR"
 elif [ "$CLEAN_SLATE" ]; then
   rm -rf "$PROJECT_COREBOOT_BUILD_DIR" || true
   mkdir "$PROJECT_COREBOOT_BUILD_DIR"
 fi
-
+echo "part 1"
 # part no.2
 # check fot Docker sdk, prepare sdk
+echo "part 2"
 $PROJECT_SCRIPT_DIR/build_sdk.sh 
 
 if [[ $? -ne 0  ]]; then
@@ -84,8 +87,33 @@ if [[ $? -ne 0  ]]; then
 	exit 1
 fi
 echo "build_sdk.sh exit zero"
-exit 1
+echo "part 2"
 # part no.3
+# create coreboot framework to build DIR
+## Run Docker build_sdk
+echo "part 31"
+cd $PROJECT_ROOT_DIR 
+echo "part 32"
+git clone https://github.com/coreboot/coreboot $PROJECT_COREBOOT_DIR
+echo "part 33"
+
+cd $PROJECT_COREBOOT_DIR && git submodule update --init --recursive 
+echo "part 3"
+git clone https://github.com/coreboot/blobs.git 3rdparty/blobs/ 
+git clone https://github.com/coreboot/intel-microcode.git 3rdparty/intel-microcode/ 
+docker run --rm --privileged \
+	-v $PWD:$DOCKER_PROJECT_DIR \
+	-v "$PWD/$PROJECT_STOCK_BIOS_DIR:$DOCKER_STOCK_BIOS_DIR:ro" \
+	-v "$PWD/$PROJECT_COREBOOT_BUILD_DIR:$DOCKER_COREBOOT_BUILD_DIR" \
+	-w $DOCKER_ROOT_DIR \
+	$DOCKER_CONTAINER_NAME \
+	$PROJECT_SCRIPT_DIR/build_api.sh
+echo "part 3"
+#--user "$(id -u):$(id -g)" \
+
+
+
+
 # entering into docker powered sdk, input is compile script
 
 
@@ -118,7 +146,7 @@ else
 	mv "$DOCKER_COREBOOT_DIR/build/.config" "$DOCKER_ROOT_DIR/prj/out/coreboot.config"
 fi
 
-echo "build.sh is done"
+echo "Exiting build.sh"
 exit 0
 
 
