@@ -2,43 +2,53 @@
 # SPDX-License-Identifier: GPL-3.0+
 
 set -e
-echo "Entering compile.sh"
-################################################################################
-## VARIABLES
-################################################################################
-source ./prj/scripts/variables.sh
 
-# split code
-$DOCKER_SCRIPT_DIR/me_extract.sh
+# import variables
+source ./scripts/variables.sh
 
-# neutralize me
+echo "--> Entering compile.sh"
+######################
+##   Copy config   ##
+######################
+cd $BUILD_DIR
 
-# pre build coreboot
-$DOCKER_SCRIPT_DIR/prebuild.sh
+if [ -f "$BUILD_DIR/.config" ]; then
+	echo "--> Using existing config $BUILD_DIR/.config"
 
-# build coreboot
-	cd $DOCKER_COREBOOT_DIR
-pwd
-echo "Build coreboot..."
-make 
+	# clean config to regenerate
+	make savedefconfig
+
+	if [ -e "$BUILD_DIR/defconfig" ]; then
+		mv -i "$BUILD_DIR/defconfig" "$OUTPUT_DIR/defconfig.old"
+	fi
+else
+	if [ -f "$APP_DIR/defconfig" ]; then
+		cp "$APP_DIR/defconfig" "$BUILD_DIR/configs/defconfig"
+		echo "--> Using config $APP_DIR/defconfig"
+	elif [ -f "$OUTPUT_DIR/defconfig.old" ]; then
+		cp "$OUTPUT_DIR/defconfig.old" "$BUILD_DIR/configs/defconfig"
+		echo "--> Using config $OUTPUT_DIR/defconfig.old"
+	else
+		make menuconfig
+		echo "--> Using config --> make menuconfig"
+	fi
+fi
 
 
-echo "Exiting compile.sh"
+  ################
+  ##  Config   ##
+  ###############
+  make defconfig
+
+  if [ "$COREBOOT_CONFIG" ]; then
+    make nconfig
+  fi
+
+  ##############
+  ##   make   ##
+  ##############
+	make crossgcc
+	make iasl
+  make
+	
 exit
-
-#!/bin/bash
-
-printf "Starting auto run"
-
-bash ./cb-helper download_code || exit 1
-bash ./cb-helper build_utils || exit 1
-bash ./cb-helper split_bios || exit 1
-bash ./cb-helper neuter_me || exit 1
-bash ./cb-helper pre_build_coreboot || exit 1
-bash ./cb-helper build_coreboot || exit 1
-bash ./cb-helper build_grub || exit 1
-bash ./cb-helper assemble_grub || exit 1
-bash ./cb-helper config_seabios || exit 1
-bash ./cb-helper install_grub || exit 1
-
-printf "Auto run finished successfully"

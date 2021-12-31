@@ -112,6 +112,7 @@ echo "--> Coreboot Framework should be inside BUILD_DIR> $BUILD_DIR"
 
 ###
 echo "--> compiling framework parts"
+cd $ROOT_DIR
 docker run --rm --privileged \
   --user "$(id -u):$(id -g)" \
 	-v $PWD:$DOCKER_ROOT \
@@ -136,6 +137,38 @@ else
 	echo "--> Missing $VBIOS_ROM $(ls -la $STOCK_BIOS_DIR)"
 fi
 
+###
+cd $ROOT_DIR 
+echo "--> checking for OUTPUT_DIR"
+if [ ! -d "$OUTPUT_DIR" ]; then
+  mkdir "$OUTPUT_DIR"
+elif [ "$CLEAN_SLATE" ]; then
+  rm -rf "$OUTPUT_DIR" || true
+  mkdir "$OUTPUT_DIR"
+fi
+
+###
+echo "--> configure asemble parts"
+cd $ROOT_DIR
+docker run --rm --privileged \
+  --user "$(id -u):$(id -g)" \
+	-v $PWD:$DOCKER_ROOT \
+	-w $DOCKER_ROOT \
+	$DOCKER_CONTAINER_NAME \
+	scripts/compile.sh 
+echo "--> Compiler is done"
+
+###
+
+
+exit
+
+###
+echo "--> Configure config"
+
+
+
+exit
 ###
 echo "--> assembling bios parts"
 docker run --rm --privileged \
@@ -187,4 +220,26 @@ downloadOrUpdateCoreboot
 ##   Copy config and make   ##
 ##############################
 configAndMake
+
+
+
+
+  cd "$DOCKER_COREBOOT_DIR" || exit;
+
+
+
+  ################
+  ##  Config   ##
+  ###############
+  make defconfig
+
+  if [ "$COREBOOT_CONFIG" ]; then
+    make nconfig
+  fi
+
+  ##############
+  ##   make   ##
+  ##############
+  make
+
 
