@@ -53,4 +53,24 @@ export PROJECT_COREBOOT_BUILD_DIR="$PROJECT_APP_DIR/build"
 export PROJECT_COREBOOT_DIR="$PROJECT_COREBOOT_BUILD_DIR"
 export PROJECT_OUTPUT_DIR="PROJECT_APP_DIR/output"
 
+################################################################################
+## project tree
+##
+##  $PRJ                   - root       dir
+##      /sdk               - coreboot   dir
+##      /script            - script     dir
+##      /$MODEL            - app        dir 
+##      /$MODEL/build      - build      dir 
+##      /$MODEL/stock_bios - stock_bios dir
+##      /$MODEL/output     - output     dir
+################################################################################
+export HOST_ROOT="."
+export DOCKER_ROOT="."
+export ROOT_DIR
+export APP_DIR
+export BUILD_DIR
+export STOCK_DIR
+export COREBOOT_DIR
+export SCRIPT_DIR=""
+
 echo "Exiting variables.sh"
