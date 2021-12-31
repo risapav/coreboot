@@ -69,89 +69,95 @@ do
 done
 
 ###
-cd $PROJECT_ROOT_DIR 
-echo "check for build DIR"
-if [ ! -d "$PROJECT_COREBOOT_BUILD_DIR" ]; then
-  mkdir "$PROJECT_COREBOOT_BUILD_DIR"
+cd $ROOT_DIR 
+echo "--> checking for BUILD_DIR"
+if [ ! -d "$BUILD_DIR" ]; then
+  mkdir "$BUILD_DIR"
 elif [ "$CLEAN_SLATE" ]; then
-  rm -rf "$PROJECT_COREBOOT_BUILD_DIR" || true
-  mkdir "$PROJECT_COREBOOT_BUILD_DIR"
+  rm -rf "$BUILD_DIR" || true
+  mkdir "$BUILD_DIR"
 fi
-
-###
-echo "check fot Docker sdk, prepare sdk"
-$PROJECT_SCRIPT_DIR/build_sdk.sh 
 
 if [[ $? -ne 0  ]]; then
-	echo "build_sdk.sh exit nonzero"
+	echo "--> BUILD_DIR not exist !"
 	exit 1
+else
+  echo "--> BUILD_DIR exist..."
 fi
 
 ###
-echo "clone coreboot framework into build DIR"
-if [[ -z $(ls -A $PROJECT_COREBOOT_DIR) ]]; then
-	echo "Clone framework from github"
-	git clone https://github.com/coreboot/coreboot $PROJECT_COREBOOT_DIR
-	cd $PROJECT_COREBOOT_DIR
+echo "--> checking for Docker SDK"
+$SCRIPT_DIR/build_sdk.sh 
+
+if [[ $? -ne 0  ]]; then
+	echo "--> build_sdk.sh --> Docker SDK is not prepared !"
+	exit 1
+fi
+echo "--> build_sdk.sh --> Docker SDK is prepared..."
+
+###
+echo "--> checking whether Coreboot Framework is inside BUILD_DIR"
+if [[ -z $(ls -A $BUILD_DIR) ]]; then
+	echo "--> cloning framework from github"
+	git clone https://github.com/coreboot/coreboot $BUILD_DIR
+	cd $BUILD_DIR
 	git submodule update --init --recursive 
 	git clone https://github.com/coreboot/blobs.git 3rdparty/blobs/ 
 	git clone https://github.com/coreboot/intel-microcode.git 3rdparty/intel-microcode/ 
+  echo "--> Coreboot Framework is cloned..."
 else
-   echo "Coreboot framework should be inside $PROJECT_COREBOOT_DIR"
+   echo "--> Coreboot Framework is not neccessary to clone..."
 fi
+echo "--> Coreboot Framework should be inside BUILD_DIR> $BUILD_DIR"
 
 ###
-echo "compile framework parts"
+echo "--> compiling framework parts"
 docker run --rm --privileged \
-	-v $PWD:$DOCKER_PROJECT_DIR \
-	-v "$PWD/$PROJECT_STOCK_BIOS_DIR:$DOCKER_STOCK_BIOS_DIR:ro" \
-	-v "$PWD/$PROJECT_COREBOOT_BUILD_DIR:$DOCKER_COREBOOT_BUILD_DIR" \
-	-w $DOCKER_ROOT_DIR \
+  --user "$(id -u):$(id -g)" \
+	-v $PWD:$DOCKER_ROOT \
+	-w $DOCKER_ROOT \
 	$DOCKER_CONTAINER_NAME \
-	$PROJECT_SCRIPT_DIR/build_api.sh
-echo "part 3"
-#--user "$(id -u):$(id -g)" \
+	scripts/me_extract.sh 
+echo "--> ME extractor is done"
 
 ###
-echo "Pre build"
-if [ -f "$PROJECT_STOCK_BIOS_DIR/$BOOTSPLASH" ]; then
-	cp "$PROJECT_STOCK_BIOS_DIR/$BOOTSPLASH" "$PROJECT_COREBOOT_BUILD_DIR/$BOOTSPLASH"
-	echo "Copied $BOOTSPLASH"
+echo "--> running  pre build"
+if [ -f "$STOCK_BIOS_DIR/$BOOTSPLASH" ]; then
+	cp "$STOCK_BIOS_DIR/$BOOTSPLASH" "$BUILD_DIR/$BOOTSPLASH"
+	echo "--> Copied $BOOTSPLASH"
 else
-	echo "Missing $BOOTSPLASH"
+	echo "--> Missing $BOOTSPLASH inside STOCK_BIOS_DIR> $(ls -la $STOCK_BIOS_DIR)"
 fi
 
-if [ -f "$PROJECT_STOCK_BIOS_DIR/$VBIOS_ROM" ]; then
-	cp "$PROJECT_STOCK_BIOS_DIR/$VBIOS_ROM"  "$PROJECT_COREBOOT_BUILD_DIR/$VBIOS_ROM"
-	echo "Copied $VBIOS_ROM"
+if [ -f "$STOCK_BIOS_DIR/$VBIOS_ROM" ]; then
+	cp "$STOCK_BIOS_DIR/$VBIOS_ROM"  "$BUILD_DIR/$VBIOS_ROM"
+	echo "--> Copied $VBIOS_ROM"
 else
-	echo "Missing $VBIOS_ROM"
+	echo "--> Missing $VBIOS_ROM $(ls -la $STOCK_BIOS_DIR)"
 fi
 
 ###
-echo "assembly bios parts"
+echo "--> assembling bios parts"
 docker run --rm --privileged \
 	--user "$(id -u):$(id -g)" \
-	-v $PWD:$DOCKER_PROJECT_DIR \
-	-v "$PWD/$PROJECT_STOCK_BIOS_DIR:$DOCKER_STOCK_BIOS_DIR:ro" \
-	-v "$PWD/$PROJECT_COREBOOT_BUILD_DIR:$DOCKER_COREBOOT_BUILD_DIR" \
-	-w $DOCKER_ROOT_DIR \
-	$DOCKER_CONTAINER_NAME \
-	$DOCKER_SCRIPT_DIR/compile.sh
+	-v $PWD:$DOCKER_ROOT \
+	-w $DOCKER_ROOT \
+	$DOCKER_CONTAINER_NAME \	
+	scripts/compile.sh
 
 ###
-echo "Post build"
+echo "--> running post build"
 ## copy compilation results to out DIR, save config file
-if [ ! -f "$PROJECT_COREBOOT_BUILD_DIR/coreboot.rom" ]; then
-	echo "coreboot.rom as output of compile is missing..."
+if [ ! -f "$BUILD_DIR/coreboot.rom" ]; then
+	echo "--> coreboot.rom as output of compile is missing..."
 	exit 4;
 else
-	mkdir -p $PROJECT_OUTPUT_DIR
-	mv "$PROJECT_COREBOOT_BUILD_DIR/coreboot.rom" "$PROJECT_OUTPUT_DIR/coreboot.rom"
-	mv "$PROJECT_COREBOOT_BUILD_DIR/.config" "$PROJECT_OUTPUT_DIR/coreboot.config"
+	mkdir -p $OUTPUT_DIR
+	mv "$BUILD_DIR/coreboot.rom" "$OUTPUT_DIR/coreboot.rom"
+	mv "$BUILD_DIR/.config" "$OUTPUT_DIR/coreboot.config"
 fi
 
-echo "Exiting build.sh"
+echo "--> Exiting build.sh, work is done"
 exit 0
 
 

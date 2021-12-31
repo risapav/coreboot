@@ -15,15 +15,15 @@ DOCKER_IMAGE_ID=$( docker images --format "{{.ID}}" --filter=reference=$DOCKER_C
 
 if [[ -z $DOCKER_IMAGE_ID ]]; then
 	# Coreboot
-  if [ ! -d ./sdk ]; then
+  if [[ ! -d $WORKER_DIR ]]; then
     printf "Downloading Coreboot\n"
-    git clone --recursive http://github.com/risapav/docker_coreboot.git ./sdk
+    git clone --recursive $COREBOOT_SDK_REPOSITORY $WORKER_DIR
   else
     printf "Coreboot repository is already present\n"
   fi
 	
 	# coreboot-sdk is necessary to create
-	docker build ./sdk -t $DOCKER_CONTAINER_NAME
+	docker build $WORKER_DIR -t $DOCKER_CONTAINER_NAME
 	if [[ $? -ne 0  ]]; then
 		echo "Docker image $DOCKER_CONTAINER_NAME can not create..."
 		exit 1

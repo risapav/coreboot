@@ -2,13 +2,17 @@
 # SPDX-License-Identifier: GPL-3.0+
 
 set -e
-echo "Entering me_extract.sh"
+
+# import variables
+source ./scripts/variables.sh
+
+echo "--> Entering me_extract.sh"
 #######################
 ##   build ifdtool   ##
 #######################
-if [ ! -f "$DOCKER_COREBOOT_DIR/util/ifdtool/ifdtool" ]; then
+if [ ! -f "$BUILD_DIR/util/ifdtool/ifdtool" ]; then
   # Make ifdtool
-  cd "$DOCKER_COREBOOT_DIR/util/ifdtool" || exit
+  cd "$BUILD_DIR/util/ifdtool" || exit
   make
   chmod +x ifdtool || exit
 fi
@@ -16,18 +20,18 @@ fi
 ###################################################################################
 ##  Extract Intel ME firmware, Gigabit Ethernet firmware, flash descriptor, etc  ##
 ###################################################################################
-if [ ! -d "$DOCKER_COREBOOT_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/" ]; then
-  mkdir -p "$DOCKER_COREBOOT_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/"
+if [ ! -d "$BUILD_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/" ]; then
+  mkdir -p "$BUILD_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/"
 fi
 
 
-if [ ! -f "$DOCKER_COREBOOT_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/gbe.bin" ]; then
-  cd "$DOCKER_COREBOOT_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/" || exit
+if [ ! -f "$BUILD_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/gbe.bin" ]; then
+  cd "$BUILD_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/" || exit
 
-  cp "$DOCKER_COREBOOT_DIR/util/ifdtool/ifdtool" .
+  cp "$BUILD_DIR/util/ifdtool/ifdtool" .
 
   # ALWAYS COPY THE ORIGINAL.  Never modified the original stock bios file
-  cp "$DOCKER_STOCK_BIOS_DIR/$STOCK_BIOS_ROM" .
+  cp "$STOCK_BIOS_DIR/$STOCK_BIOS_ROM" .
 
   # unlock, extract blobs and rename
   ./ifdtool -u "$STOCK_BIOS_ROM" || exit
@@ -43,7 +47,5 @@ if [ ! -f "$DOCKER_COREBOOT_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/gbe.b
   rm ifdtool
   rm flashregion_1_bios.bin
 fi
-
-echo "ME extractor is done"
 
 exit
