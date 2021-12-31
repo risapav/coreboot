@@ -5,6 +5,7 @@
 set -e
 
 echo "Entering build.sh"
+
 # import variables
 source ./scripts/variables.sh
 
@@ -67,40 +68,40 @@ do
     esac
 done
 
-# part no.1
-# check for build DIR
-echo "part 1"
+###
+cd $PROJECT_ROOT_DIR 
+echo "check for build DIR"
 if [ ! -d "$PROJECT_COREBOOT_BUILD_DIR" ]; then
   mkdir "$PROJECT_COREBOOT_BUILD_DIR"
 elif [ "$CLEAN_SLATE" ]; then
   rm -rf "$PROJECT_COREBOOT_BUILD_DIR" || true
   mkdir "$PROJECT_COREBOOT_BUILD_DIR"
 fi
-echo "part 1"
-# part no.2
-# check fot Docker sdk, prepare sdk
-echo "part 2"
+
+###
+echo "check fot Docker sdk, prepare sdk"
 $PROJECT_SCRIPT_DIR/build_sdk.sh 
 
 if [[ $? -ne 0  ]]; then
 	echo "build_sdk.sh exit nonzero"
 	exit 1
 fi
-echo "build_sdk.sh exit zero"
-echo "part 2"
-# part no.3
-# create coreboot framework to build DIR
-## Run Docker build_sdk
-echo "part 31"
-cd $PROJECT_ROOT_DIR 
-echo "part 32"
-git clone https://github.com/coreboot/coreboot $PROJECT_COREBOOT_DIR
-echo "part 33"
 
-cd $PROJECT_COREBOOT_DIR && git submodule update --init --recursive 
-echo "part 3"
-git clone https://github.com/coreboot/blobs.git 3rdparty/blobs/ 
-git clone https://github.com/coreboot/intel-microcode.git 3rdparty/intel-microcode/ 
+###
+echo "clone coreboot framework into build DIR"
+if [[ -z $(ls -A $PROJECT_COREBOOT_DIR) ]]; then
+	echo "Clone framework from github"
+	git clone https://github.com/coreboot/coreboot $PROJECT_COREBOOT_DIR
+	cd $PROJECT_COREBOOT_DIR
+	git submodule update --init --recursive 
+	git clone https://github.com/coreboot/blobs.git 3rdparty/blobs/ 
+	git clone https://github.com/coreboot/intel-microcode.git 3rdparty/intel-microcode/ 
+else
+   echo "Coreboot framework should be inside $PROJECT_COREBOOT_DIR"
+fi
+
+###
+echo "compile framework parts"
 docker run --rm --privileged \
 	-v $PWD:$DOCKER_PROJECT_DIR \
 	-v "$PWD/$PROJECT_STOCK_BIOS_DIR:$DOCKER_STOCK_BIOS_DIR:ro" \
@@ -111,17 +112,26 @@ docker run --rm --privileged \
 echo "part 3"
 #--user "$(id -u):$(id -g)" \
 
+###
+echo "Pre build"
+if [ -f "$PROJECT_STOCK_BIOS_DIR/$BOOTSPLASH" ]; then
+	cp "$PROJECT_STOCK_BIOS_DIR/$BOOTSPLASH" "$PROJECT_COREBOOT_BUILD_DIR/$BOOTSPLASH"
+	echo "Copied $BOOTSPLASH"
+else
+	echo "Missing $BOOTSPLASH"
+fi
 
+if [ -f "$PROJECT_STOCK_BIOS_DIR/$VBIOS_ROM" ]; then
+	cp "$PROJECT_STOCK_BIOS_DIR/$VBIOS_ROM"  "$PROJECT_COREBOOT_BUILD_DIR/$VBIOS_ROM"
+	echo "Copied $VBIOS_ROM"
+else
+	echo "Missing $VBIOS_ROM"
+fi
 
-
-# entering into docker powered sdk, input is compile script
-
-
-## Run Docker build_sdk
+###
+echo "assembly bios parts"
 docker run --rm --privileged \
 	--user "$(id -u):$(id -g)" \
-	-p 4500:4500 \
-	-v /dev/bus/usb:/dev/bus/usb \
 	-v $PWD:$DOCKER_PROJECT_DIR \
 	-v "$PWD/$PROJECT_STOCK_BIOS_DIR:$DOCKER_STOCK_BIOS_DIR:ro" \
 	-v "$PWD/$PROJECT_COREBOOT_BUILD_DIR:$DOCKER_COREBOOT_BUILD_DIR" \
@@ -129,21 +139,16 @@ docker run --rm --privileged \
 	$DOCKER_CONTAINER_NAME \
 	$DOCKER_SCRIPT_DIR/compile.sh
 
-
-
-
-# part no.4
-#####################
-##   Post build    ##
-#####################
+###
+echo "Post build"
 ## copy compilation results to out DIR, save config file
-if [ ! -f "$DOCKER_COREBOOT_DIR/build/coreboot.rom" ]; then
+if [ ! -f "$PROJECT_COREBOOT_BUILD_DIR/coreboot.rom" ]; then
 	echo "coreboot.rom as output of compile is missing..."
 	exit 4;
 else
-	mkdir -p $DOCKER_ROOT_DIR/prj/out
-	mv "$DOCKER_COREBOOT_DIR/build/coreboot.rom" "$DOCKER_ROOT_DIR/prj/out/coreboot.rom"
-	mv "$DOCKER_COREBOOT_DIR/build/.config" "$DOCKER_ROOT_DIR/prj/out/coreboot.config"
+	mkdir -p $PROJECT_COREBOOT_OUT_DIR
+	mv "$PROJECT_COREBOOT_BUILD_DIR/coreboot.rom" "$PROJECT_COREBOOT_BUILD_DIR/coreboot.rom"
+	mv "$PROJECT_COREBOOT_BUILD_DIR/.config" "$PROJECT_COREBOOT_BUILD_DIR/coreboot.config"
 fi
 
 echo "Exiting build.sh"
@@ -181,19 +186,7 @@ downloadOrUpdateCoreboot
 
 
 
-if [ -f "$DOCKER_SCRIPT_DIR/$BOOTSPLASH" ]; then
-  cp "$DOCKER_SCRIPT_DIR/$BOOTSPLASH" "$DOCKER_COREBOOT_DIR/bootsplash.jpg"
-  echo "Copied $BOOTSPLASH"
-else
-  echo "Missing $BOOTSPLASH"
-fi
 
-if [ -f "$DOCKER_STOCK_BIOS_DIR/$VBIOS_ROM" ]; then
-  cp "$DOCKER_STOCK_BIOS_DIR/$VBIOS_ROM"  "$DOCKER_COREBOOT_DIR/vbios.bin"
-  echo "Copied $VBIOS_ROM"
-else
-  echo "Missing $VBIOS_ROM"
-fi
 
 
 ##############################
