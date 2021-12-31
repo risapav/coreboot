@@ -1,7 +1,7 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-3.0+
-
 set -e
+
 echo "Entering variables.sh"
 ################################################################################
 ## VARIABLES - necessary update before 
@@ -57,20 +57,21 @@ export PROJECT_OUTPUT_DIR="PROJECT_APP_DIR/output"
 ## project tree
 ##
 ##  $PRJ                   - root       dir
-##      /sdk               - coreboot   dir
-##      /script            - script     dir
-##      /$MODEL            - app        dir 
-##      /$MODEL/build      - build      dir 
-##      /$MODEL/stock_bios - stock_bios dir
-##      /$MODEL/output     - output     dir
+##  $PRJ/sdk               - coreboot   dir in docker container
+##  $PRJ/script            - script     dir
+##  $PRJ/$MODEL            - app        dir 
+##  $PRJ/$MODEL/build      - build      dir 
+##  $PRJ/$MODEL/output     - output     dir
+##  $PRJ/$MODEL/stock_bios - stock_bios dir
 ################################################################################
 export HOST_ROOT="."
-export DOCKER_ROOT="."
-export ROOT_DIR
-export APP_DIR
-export BUILD_DIR
-export STOCK_DIR
-export COREBOOT_DIR
-export SCRIPT_DIR=""
+export DOCKER_ROOT="/home/sdk"
+export ROOT_DIR=$PWD
+export COREBOOT_DIR="$ROOT_DIR/coreboot"
+export SCRIPT_DIR="$ROOT_DIR/script"
+export APP_DIR="$ROOT_DIR/$MODEL"
+export BUILD_DIR="$ROOT_DIR/$MODEL/build"
+export OUTPUT_DIR="$ROOT_DIR/$MODEL/output"
+export STOCK_BIOD_DIR="$ROOT_DIR/$MODEL/stock_bios"
 
 echo "Exiting variables.sh"
