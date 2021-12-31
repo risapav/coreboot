@@ -146,9 +146,9 @@ if [ ! -f "$PROJECT_COREBOOT_BUILD_DIR/coreboot.rom" ]; then
 	echo "coreboot.rom as output of compile is missing..."
 	exit 4;
 else
-	mkdir -p $PROJECT_COREBOOT_OUT_DIR
-	mv "$PROJECT_COREBOOT_BUILD_DIR/coreboot.rom" "$PROJECT_COREBOOT_BUILD_DIR/coreboot.rom"
-	mv "$PROJECT_COREBOOT_BUILD_DIR/.config" "$PROJECT_COREBOOT_BUILD_DIR/coreboot.config"
+	mkdir -p $PROJECT_OUTPUT_DIR
+	mv "$PROJECT_COREBOOT_BUILD_DIR/coreboot.rom" "$PROJECT_OUTPUT_DIR/coreboot.rom"
+	mv "$PROJECT_COREBOOT_BUILD_DIR/.config" "$PROJECT_OUTPUT_DIR/coreboot.config"
 fi
 
 echo "Exiting build.sh"
@@ -162,18 +162,6 @@ exit
 
 source /home/coreboot/common_scripts/./download_coreboot.sh
 source /home/coreboot/common_scripts/./config_and_make.sh
-
-
-################################################################################
-## MODEL VARIABLES
-################################################################################
-MAINBOARD="lenovo"
-MODEL="t410"
-
-STOCK_BIOS_ROM="stock_bios.bin"
-VBIOS_ROM="vbios.bin"
-
-BOOTSPLASH="bootsplash.jpg"
 
 ################################################################################
 
