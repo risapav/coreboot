@@ -74,4 +74,9 @@ export BUILD_DIR="$ROOT_DIR/$MODEL/build"
 export OUTPUT_DIR="$ROOT_DIR/$MODEL/output"
 export STOCK_BIOD_DIR="$ROOT_DIR/$MODEL/stock_bios"
 
+################################################################################
+## https://wiki.bash-hackers.org/
+## https://devhints.io/bash
+################################################################################
+
 echo "Exiting variables.sh"
