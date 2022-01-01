@@ -9,6 +9,7 @@ echo "Entering build.sh"
 # import variables
 source ./scripts/variables.sh
 
+export COREBOOT_CONFIG=false
 
 ## Help menu
 usage()

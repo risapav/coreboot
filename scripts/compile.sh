@@ -47,8 +47,11 @@ fi
   ##############
   ##   make   ##
   ##############
-	make crossgcc
-	make iasl
-  make
+	echo "crossgcc for i386"
+	make crossgcc-i386 CPUS=$(nproc)    
+	util/crossgcc/buildgcc -j $(nproc)
+	echo "iasl"
+	make iasl CPUS=$(nproc)    
+  make CPUS=$(nproc)    
 	
 exit
