@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0+
 set -e
 
-echo "Entering variables.sh $PWD"
+#echo "Entering variables.sh $PWD"
 ################################################################################
 ## VARIABLES - necessary update before 
 ################################################################################
@@ -21,6 +21,10 @@ export VBIOS_ROM="vbios.bin"
 ## picture 
 export BOOTSPLASH="bootsplash.jpg"
 
+
+
+## log file
+export LOG_FILE="log.txt"
 ################################################################################
 ## MODEL VARIABLES
 ################################################################################
@@ -56,3 +60,9 @@ export STOCK_BIOS_DIR="$ROOT_DIR/$MODEL/stock_bios"
 ## https://devhints.io/bash
 ################################################################################
 # printenv
+
+echolog()
+{
+	printf "%(%Y-%m-%d %T)T ----> %s\n" -1 "$@"
+	printf "%(%Y-%m-%d %T)T ----> %s\n" -1 "$@" >> $OUTPUT_DIR/$LOG_FILE
+}

@@ -9,7 +9,7 @@ echo "Entering build.sh"
 # import variables
 source ./scripts/variables.sh
 
-export COREBOOT_CONFIG=false
+# export COREBOOT_CONFIG=false
 
 ## Help menu
 usage()
@@ -18,6 +18,9 @@ usage()
   echo
   echo "  $0 [-t <TAG>] [-c <COMMIT>] [--config] [--bleeding-edge] [--clean-slate] <model>"
   echo
+  echo "  -cb, --clean-build           Purge build directory"
+  echo "  -cc, --clean-config          Purge config in build directory"
+  echo "  -cd, --clean-docker          Purge docker image Coreboot-sdk"
   echo "  --bleeding-edge              Build from the latest commit"
   echo "  --clean-slate                Purge previous build directory and config"
   echo "  -c, --commit <commit>        Git commit hash"
@@ -39,6 +42,15 @@ usage()
 while :
 do
     case "$1" in
+      -cb | --clean-build)  
+        $SCRIPT_DIR/clean.sh -cb
+        exit 0;;      
+      -cc | --clean-config) 
+        $SCRIPT_DIR/clean.sh -cc
+        exit 0;;
+      -cd | --clean-docker) 
+        $SCRIPT_DIR/clean.sh -cd
+        exit 0;;
       --bleeding-edge)
         COREBOOT_COMMIT="master"
         shift 1;;
@@ -56,7 +68,8 @@ do
         exit 0;;
       -i | --config)
         COREBOOT_CONFIG=true
-        shift 1;;
+				break;;
+        #shift 1;;
       -t | --tag)
         COREBOOT_TAG="$2"
         shift 2;;
@@ -71,7 +84,16 @@ done
 
 ###
 cd $ROOT_DIR 
-echo "--> checking for BUILD_DIR"
+echolog "checking for OUTPUT_DIR"
+if [ ! -d "$OUTPUT_DIR" ]; then
+  mkdir "$OUTPUT_DIR"
+elif [ "$CLEAN_SLATE" ]; then
+  rm -rf "$OUTPUT_DIR" || true
+  mkdir "$OUTPUT_DIR"
+fi
+
+cd $ROOT_DIR 
+echolog "checking for BUILD_DIR"
 if [ ! -d "$BUILD_DIR" ]; then
   mkdir "$BUILD_DIR"
 elif [ "$CLEAN_SLATE" ]; then
@@ -80,10 +102,10 @@ elif [ "$CLEAN_SLATE" ]; then
 fi
 
 if [[ $? -ne 0  ]]; then
-	echo "--> BUILD_DIR not exist !"
+	echolog "BUILD_DIR not exist !"
 	exit 1
 else
-  echo "--> BUILD_DIR exist..."
+  echolog "BUILD_DIR exist..."
 fi
 
 ###
@@ -91,28 +113,27 @@ echo "--> checking for Docker SDK"
 $SCRIPT_DIR/build_sdk.sh 
 
 if [[ $? -ne 0  ]]; then
-	echo "--> build_sdk.sh --> Docker SDK is not prepared !"
+	echolog "build_sdk.sh --> Docker SDK is not prepared !"
 	exit 1
 fi
-echo "--> build_sdk.sh --> Docker SDK is prepared..."
+echolog "build_sdk.sh --> Docker SDK is prepared..."
 
 ###
-echo "--> checking whether Coreboot Framework is inside BUILD_DIR"
+echolog "checking whether Coreboot Framework is inside BUILD_DIR"
 if [[ -z $(ls -A $BUILD_DIR) ]]; then
-	echo "--> cloning framework from github"
+	echolog "cloning Coreboot framework from github"
 	git clone https://github.com/coreboot/coreboot $BUILD_DIR
 	cd $BUILD_DIR
 	git submodule update --init --recursive 
 	git clone https://github.com/coreboot/blobs.git 3rdparty/blobs/ 
 	git clone https://github.com/coreboot/intel-microcode.git 3rdparty/intel-microcode/ 
-  echo "--> Coreboot Framework is cloned..."
+  echolog "Coreboot Framework is cloned..."
 else
-   echo "--> Coreboot Framework is not neccessary to clone..."
+   echolog "Coreboot Framework is not neccessary to clone..."
 fi
-echo "--> Coreboot Framework should be inside BUILD_DIR> $BUILD_DIR"
 
 ###
-echo "--> compiling framework parts"
+echolog "pre build parts"
 cd $ROOT_DIR
 docker run --rm --privileged \
   --user "$(id -u):$(id -g)" \
@@ -120,110 +141,53 @@ docker run --rm --privileged \
 	-w $DOCKER_ROOT \
 	$DOCKER_CONTAINER_NAME \
 	scripts/me_extract.sh 
-echo "--> ME extractor is done"
+echolog "ME extractor is done"
 
 ###
-echo "--> running  pre build"
+echolog "running  pre build"
 if [ -f "$STOCK_BIOS_DIR/$BOOTSPLASH" ]; then
 	cp "$STOCK_BIOS_DIR/$BOOTSPLASH" "$BUILD_DIR/$BOOTSPLASH"
-	echo "--> Copied $BOOTSPLASH"
+	echolog "Copied $BOOTSPLASH"
 else
-	echo "--> Missing $BOOTSPLASH inside STOCK_BIOS_DIR> $(ls -la $STOCK_BIOS_DIR)"
+	echolog "Missing $BOOTSPLASH which shoul be inside STOCK_BIOS_DIR> $(ls -la $STOCK_BIOS_DIR)"
 fi
 
 if [ -f "$STOCK_BIOS_DIR/$VBIOS_ROM" ]; then
 	cp "$STOCK_BIOS_DIR/$VBIOS_ROM"  "$BUILD_DIR/$VBIOS_ROM"
-	echo "--> Copied $VBIOS_ROM"
+	echolog "Copied $VBIOS_ROM"
 else
-	echo "--> Missing $VBIOS_ROM $(ls -la $STOCK_BIOS_DIR)"
+	echolog "Missing $VBIOS_ROM which shoul be inside STOCK_BIOS_DIR> $(ls -la $STOCK_BIOS_DIR)"
 fi
 
 ###
-cd $ROOT_DIR 
-echo "--> checking for OUTPUT_DIR"
-if [ ! -d "$OUTPUT_DIR" ]; then
-  mkdir "$OUTPUT_DIR"
-elif [ "$CLEAN_SLATE" ]; then
-  rm -rf "$OUTPUT_DIR" || true
-  mkdir "$OUTPUT_DIR"
-fi
+
 
 ###
-echo "--> configure asemble parts"
+echolog "configure asemble parts $@ $0 $1"
 cd $ROOT_DIR
 docker run --rm --privileged \
   --user "$(id -u):$(id -g)" \
 	-v $PWD:$DOCKER_ROOT \
 	-w $DOCKER_ROOT \
 	$DOCKER_CONTAINER_NAME \
-	scripts/compile.sh 
-echo "--> Compiler is done"
+	scripts/compile.sh $1
+echolog "Compiler is done"
 
 ###
-
-
-exit
-
-###
-echo "--> Configure config"
-
-
-
-exit
-###
-echo "--> assembling bios parts"
-docker run --rm --privileged \
-	--user "$(id -u):$(id -g)" \
-	-v $PWD:$DOCKER_ROOT \
-	-w $DOCKER_ROOT \
-	$DOCKER_CONTAINER_NAME \	
-	scripts/compile.sh
-
-###
-echo "--> running post build"
+echolog "running post build"
 ## copy compilation results to out DIR, save config file
 if [ ! -f "$BUILD_DIR/coreboot.rom" ]; then
-	echo "--> coreboot.rom as output of compile is missing..."
+	echolog "coreboot.rom as output of compile is missing..."
 	exit 4;
 else
 	mkdir -p $OUTPUT_DIR
 	mv "$BUILD_DIR/coreboot.rom" "$OUTPUT_DIR/coreboot.rom"
 	mv "$BUILD_DIR/.config" "$OUTPUT_DIR/coreboot.config"
+  echolog "coreboot.rom and .config files are copied inside OUTPUT_DIR"
 fi
 
-echo "--> Exiting build.sh, work is done"
+echolog "--> Exiting build.sh, work is done"
 exit 0
-
-
-# shellcheck disable=SC1091
-
-
-exit
-
-source /home/coreboot/common_scripts/./download_coreboot.sh
-source /home/coreboot/common_scripts/./config_and_make.sh
-
-################################################################################
-
-###############################################
-##   download/git clone/git pull Coreboot    ##
-###############################################
-downloadOrUpdateCoreboot
-
-
-
-
-
-
-
-
-##############################
-##   Copy config and make   ##
-##############################
-configAndMake
-
-
-
 
   cd "$DOCKER_COREBOOT_DIR" || exit;
 

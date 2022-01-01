@@ -6,7 +6,7 @@ set -e
 # import variables
 source ./scripts/variables.sh
 
-echo "--> Entering me_extract.sh"
+echolog "Entering me_extract.sh"
 #######################
 ##   build ifdtool   ##
 #######################

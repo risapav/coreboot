@@ -1,0 +1,268 @@
+2022-01-01 18:39:59 ----> checking for OUTPUT_DIR
+2022-01-01 18:39:59 ----> checking for BUILD_DIR
+2022-01-01 18:39:59 ----> BUILD_DIR exist...
+2022-01-01 18:41:30 ----> build_sdk.sh --> Docker SDK is prepared...
+2022-01-01 18:41:30 ----> checking whether Coreboot Framework is inside BUILD_DIR
+2022-01-01 18:41:30 ----> Coreboot Framework is not neccessary to clone...
+2022-01-01 18:41:30 ----> Coreboot Framework should be inside BUILD_DIR > /home/palo/Dokumenty/projekty/coreboot/t410/build
+2022-01-01 18:41:30 ----> pre build parts
+2022-01-01 17:41:30 ----> Entering me_extract.sh
+2022-01-01 18:41:30 ----> ME extractor is done
+2022-01-01 18:41:30 ----> running  pre build
+2022-01-01 18:41:30 ----> Copied bootsplash.jpg
+2022-01-01 18:41:30 ----> Copied vbios.bin
+2022-01-01 18:41:30 ----> configure asemble parts
+2022-01-01 18:48:36 ----> entering to /home/palo/Dokumenty/projekty/coreboot/scripts/clean.sh -cc
+2022-01-01 18:48:36 ----> /home/palo/Dokumenty/projekty/coreboot/t410/build/.config erased 0
+2022-01-01 18:48:56 ----> entering to /home/palo/Dokumenty/projekty/coreboot/scripts/clean.sh -cd
+2022-01-01 18:48:56 ----> coreboot_sdk container is running, container ID: 
+2022-01-01 18:51:05 ----> entering to /home/palo/Dokumenty/projekty/coreboot/scripts/clean.sh -cd
+2022-01-01 18:51:05 ----> deleting WORKER_DIR
+2022-01-01 18:51:52 ----> entering to /home/palo/Dokumenty/projekty/coreboot/scripts/clean.sh -cd
+2022-01-01 18:51:52 ----> deleting WORKER_DIR
+2022-01-01 18:52:13 ----> WORKER_DIR erased 0
+2022-01-01 18:52:13 ----> DOCKER_IMAGE erased, id: 4a1d5bf5a418, status 0
+2022-01-01 18:53:47 ----> entering to /home/palo/Dokumenty/projekty/coreboot/scripts/clean.sh -cd
+2022-01-01 18:53:47 ----> WORKER_DIR is not present
+2022-01-01 18:53:59 ----> checking for OUTPUT_DIR
+2022-01-01 18:53:59 ----> checking for BUILD_DIR
+2022-01-01 18:53:59 ----> BUILD_DIR exist...
+2022-01-01 18:56:02 ----> build_sdk.sh --> Docker SDK is prepared...
+2022-01-01 18:56:02 ----> checking whether Coreboot Framework is inside BUILD_DIR
+2022-01-01 18:56:02 ----> Coreboot Framework is not neccessary to clone...
+2022-01-01 18:56:02 ----> Coreboot Framework should be inside BUILD_DIR > /home/palo/Dokumenty/projekty/coreboot/t410/build
+2022-01-01 18:56:02 ----> pre build parts
+2022-01-01 17:56:02 ----> Entering me_extract.sh
+2022-01-01 18:56:02 ----> ME extractor is done
+2022-01-01 18:56:02 ----> running  pre build
+2022-01-01 18:56:02 ----> Copied bootsplash.jpg
+2022-01-01 18:56:02 ----> Copied vbios.bin
+2022-01-01 18:56:02 ----> configure asemble parts
+2022-01-01 19:06:20 ----> entering to /home/palo/Dokumenty/projekty/coreboot/scripts/clean.sh -cd
+2022-01-01 19:06:21 ----> deleting WORKER_DIR
+2022-01-01 19:07:07 ----> entering to /home/palo/Dokumenty/projekty/coreboot/scripts/clean.sh -cd
+2022-01-01 19:07:07 ----> deleting WORKER_DIR
+2022-01-01 19:07:07 ----> WORKER_DIR erased 0
+2022-01-01 19:07:07 ----> DOCKER_IMAGE erased, id: 4b3b0c62f217, status 0
+2022-01-01 19:07:46 ----> entering to /home/palo/Dokumenty/projekty/coreboot/scripts/clean.sh -cd
+2022-01-01 19:07:46 ----> WORKER_DIR is not present
+2022-01-01 19:08:39 ----> entering to /home/palo/Dokumenty/projekty/coreboot/scripts/clean.sh -cd
+2022-01-01 19:08:39 ----> WORKER_DIR is not present
+2022-01-01 19:08:48 ----> checking for OUTPUT_DIR
+2022-01-01 19:08:48 ----> checking for BUILD_DIR
+2022-01-01 19:08:48 ----> BUILD_DIR exist...
+2022-01-01 19:10:34 ----> build_sdk.sh --> Docker SDK is prepared...
+2022-01-01 19:10:34 ----> checking whether Coreboot Framework is inside BUILD_DIR
+2022-01-01 19:10:34 ----> Coreboot Framework is not neccessary to clone...
+2022-01-01 19:10:34 ----> Coreboot Framework should be inside BUILD_DIR > /home/palo/Dokumenty/projekty/coreboot/t410/build
+2022-01-01 19:10:34 ----> pre build parts
+2022-01-01 18:10:34 ----> Entering me_extract.sh
+2022-01-01 19:10:35 ----> ME extractor is done
+2022-01-01 19:10:35 ----> running  pre build
+2022-01-01 19:10:35 ----> Copied bootsplash.jpg
+2022-01-01 19:10:35 ----> Copied vbios.bin
+2022-01-01 19:10:35 ----> configure asemble parts
+2022-01-01 19:16:52 ----> checking for OUTPUT_DIR
+2022-01-01 19:16:52 ----> checking for BUILD_DIR
+2022-01-01 19:16:52 ----> BUILD_DIR exist...
+2022-01-01 19:16:52 ----> build_sdk.sh --> Docker SDK is prepared...
+2022-01-01 19:16:52 ----> checking whether Coreboot Framework is inside BUILD_DIR
+2022-01-01 19:16:52 ----> Coreboot Framework is not neccessary to clone...
+2022-01-01 19:16:52 ----> Coreboot Framework should be inside BUILD_DIR > /home/palo/Dokumenty/projekty/coreboot/t410/build
+2022-01-01 19:16:52 ----> pre build parts
+2022-01-01 18:16:53 ----> Entering me_extract.sh
+2022-01-01 19:16:53 ----> ME extractor is done
+2022-01-01 19:16:53 ----> running  pre build
+2022-01-01 19:16:53 ----> Copied bootsplash.jpg
+2022-01-01 19:16:53 ----> Copied vbios.bin
+2022-01-01 19:16:53 ----> configure asemble parts
+2022-01-01 19:19:25 ----> checking for OUTPUT_DIR
+2022-01-01 19:19:25 ----> checking for BUILD_DIR
+2022-01-01 19:19:25 ----> BUILD_DIR exist...
+2022-01-01 19:19:26 ----> build_sdk.sh --> Docker SDK is prepared...
+2022-01-01 19:19:26 ----> checking whether Coreboot Framework is inside BUILD_DIR
+2022-01-01 19:19:26 ----> Coreboot Framework is not neccessary to clone...
+2022-01-01 19:19:26 ----> Coreboot Framework should be inside BUILD_DIR > /home/palo/Dokumenty/projekty/coreboot/t410/build
+2022-01-01 19:19:26 ----> pre build parts
+2022-01-01 18:19:26 ----> Entering me_extract.sh
+2022-01-01 19:19:26 ----> ME extractor is done
+2022-01-01 19:19:26 ----> running  pre build
+2022-01-01 19:19:26 ----> Copied bootsplash.jpg
+2022-01-01 19:19:26 ----> Copied vbios.bin
+2022-01-01 19:19:26 ----> configure asemble parts
+2022-01-01 19:24:20 ----> checking for OUTPUT_DIR
+2022-01-01 19:24:20 ----> checking for BUILD_DIR
+2022-01-01 19:24:20 ----> BUILD_DIR exist...
+2022-01-01 19:24:20 ----> build_sdk.sh --> Docker SDK is prepared...
+2022-01-01 19:24:20 ----> checking whether Coreboot Framework is inside BUILD_DIR
+2022-01-01 19:24:20 ----> Coreboot Framework is not neccessary to clone...
+2022-01-01 19:24:20 ----> Coreboot Framework should be inside BUILD_DIR > /home/palo/Dokumenty/projekty/coreboot/t410/build
+2022-01-01 19:24:20 ----> pre build parts
+2022-01-01 18:24:20 ----> Entering me_extract.sh
+2022-01-01 19:24:20 ----> ME extractor is done
+2022-01-01 19:24:20 ----> running  pre build
+2022-01-01 19:24:20 ----> Copied bootsplash.jpg
+2022-01-01 19:24:20 ----> Copied vbios.bin
+2022-01-01 19:24:20 ----> configure asemble parts
+2022-01-01 19:29:04 ----> checking for OUTPUT_DIR
+2022-01-01 19:29:04 ----> checking for BUILD_DIR
+2022-01-01 19:29:04 ----> BUILD_DIR exist...
+2022-01-01 19:29:05 ----> build_sdk.sh --> Docker SDK is prepared...
+2022-01-01 19:29:05 ----> checking whether Coreboot Framework is inside BUILD_DIR
+2022-01-01 19:29:05 ----> Coreboot Framework is not neccessary to clone...
+2022-01-01 19:29:05 ----> pre build parts
+2022-01-01 18:29:05 ----> Entering me_extract.sh
+2022-01-01 19:29:05 ----> ME extractor is done
+2022-01-01 19:29:05 ----> running  pre build
+2022-01-01 19:29:05 ----> Copied bootsplash.jpg
+2022-01-01 19:29:05 ----> Copied vbios.bin
+2022-01-01 19:29:05 ----> configure asemble parts
+2022-01-01 19:32:55 ----> checking for OUTPUT_DIR
+2022-01-01 19:32:55 ----> checking for BUILD_DIR
+2022-01-01 19:32:55 ----> BUILD_DIR exist...
+2022-01-01 19:32:55 ----> build_sdk.sh --> Docker SDK is prepared...
+2022-01-01 19:32:55 ----> checking whether Coreboot Framework is inside BUILD_DIR
+2022-01-01 19:32:55 ----> Coreboot Framework is not neccessary to clone...
+2022-01-01 19:32:55 ----> pre build parts
+2022-01-01 18:32:56 ----> Entering me_extract.sh
+2022-01-01 19:32:56 ----> ME extractor is done
+2022-01-01 19:32:56 ----> running  pre build
+2022-01-01 19:32:56 ----> Copied bootsplash.jpg
+2022-01-01 19:32:56 ----> Copied vbios.bin
+2022-01-01 19:32:56 ----> configure asemble parts
+2022-01-01 18:32:56 ----> Entering compile.sh  scripts/compile.sh 
+2022-01-01 19:36:51 ----> checking for OUTPUT_DIR
+2022-01-01 19:36:51 ----> checking for BUILD_DIR
+2022-01-01 19:36:51 ----> BUILD_DIR exist...
+2022-01-01 19:36:52 ----> build_sdk.sh --> Docker SDK is prepared...
+2022-01-01 19:36:52 ----> checking whether Coreboot Framework is inside BUILD_DIR
+2022-01-01 19:36:52 ----> Coreboot Framework is not neccessary to clone...
+2022-01-01 19:36:52 ----> pre build parts
+2022-01-01 18:36:52 ----> Entering me_extract.sh
+2022-01-01 19:36:52 ----> ME extractor is done
+2022-01-01 19:36:52 ----> running  pre build
+2022-01-01 19:36:52 ----> Copied bootsplash.jpg
+2022-01-01 19:36:52 ----> Copied vbios.bin
+2022-01-01 19:36:52 ----> configure asemble parts -i ./build.sh -i
+2022-01-01 18:36:53 ----> Entering compile.sh -i scripts/compile.sh -i
+2022-01-01 19:40:48 ----> checking for OUTPUT_DIR
+2022-01-01 19:40:48 ----> checking for BUILD_DIR
+2022-01-01 19:40:48 ----> BUILD_DIR exist...
+2022-01-01 19:40:48 ----> build_sdk.sh --> Docker SDK is prepared...
+2022-01-01 19:40:48 ----> checking whether Coreboot Framework is inside BUILD_DIR
+2022-01-01 19:40:48 ----> Coreboot Framework is not neccessary to clone...
+2022-01-01 19:40:48 ----> pre build parts
+2022-01-01 18:40:49 ----> Entering me_extract.sh
+2022-01-01 19:40:49 ----> ME extractor is done
+2022-01-01 19:40:49 ----> running  pre build
+2022-01-01 19:40:49 ----> Copied bootsplash.jpg
+2022-01-01 19:40:49 ----> Copied vbios.bin
+2022-01-01 19:40:49 ----> configure asemble parts -i ./build.sh -i
+2022-01-01 18:40:49 ----> Entering compile.sh -i scripts/compile.sh -i
+2022-01-01 18:40:49 ----> starting configuration of .config inside /home/sdk/t410/build
+2022-01-01 19:41:06 ----> checking for OUTPUT_DIR
+2022-01-01 19:41:06 ----> checking for BUILD_DIR
+2022-01-01 19:41:06 ----> BUILD_DIR exist...
+2022-01-01 19:41:06 ----> build_sdk.sh --> Docker SDK is prepared...
+2022-01-01 19:41:06 ----> checking whether Coreboot Framework is inside BUILD_DIR
+2022-01-01 19:41:06 ----> Coreboot Framework is not neccessary to clone...
+2022-01-01 19:41:06 ----> pre build parts
+2022-01-01 18:41:06 ----> Entering me_extract.sh
+2022-01-01 19:41:07 ----> ME extractor is done
+2022-01-01 19:41:07 ----> running  pre build
+2022-01-01 19:41:07 ----> Copied bootsplash.jpg
+2022-01-01 19:41:07 ----> Copied vbios.bin
+2022-01-01 19:41:07 ----> configure asemble parts -i ./build.sh -i
+2022-01-01 18:41:07 ----> Entering compile.sh -i scripts/compile.sh -i
+2022-01-01 18:41:07 ----> starting configuration of .config inside /home/sdk/t410/build
+2022-01-01 19:43:39 ----> checking for OUTPUT_DIR
+2022-01-01 19:43:39 ----> checking for BUILD_DIR
+2022-01-01 19:43:39 ----> BUILD_DIR exist...
+2022-01-01 19:43:39 ----> build_sdk.sh --> Docker SDK is prepared...
+2022-01-01 19:43:39 ----> checking whether Coreboot Framework is inside BUILD_DIR
+2022-01-01 19:43:39 ----> Coreboot Framework is not neccessary to clone...
+2022-01-01 19:43:39 ----> pre build parts
+2022-01-01 18:43:40 ----> Entering me_extract.sh
+2022-01-01 19:43:40 ----> ME extractor is done
+2022-01-01 19:43:40 ----> running  pre build
+2022-01-01 19:43:40 ----> Copied bootsplash.jpg
+2022-01-01 19:43:40 ----> Copied vbios.bin
+2022-01-01 19:43:40 ----> configure asemble parts -i ./build.sh -i
+2022-01-01 18:43:41 ----> Entering compile.sh -i scripts/compile.sh -i
+2022-01-01 18:43:41 ----> starting configuration edition of .config inside /home/sdk/t410
+2022-01-01 19:44:35 ----> checking for OUTPUT_DIR
+2022-01-01 19:44:35 ----> checking for BUILD_DIR
+2022-01-01 19:44:35 ----> BUILD_DIR exist...
+2022-01-01 19:44:35 ----> build_sdk.sh --> Docker SDK is prepared...
+2022-01-01 19:44:35 ----> checking whether Coreboot Framework is inside BUILD_DIR
+2022-01-01 19:44:35 ----> Coreboot Framework is not neccessary to clone...
+2022-01-01 19:44:35 ----> pre build parts
+2022-01-01 18:44:35 ----> Entering me_extract.sh
+2022-01-01 19:44:35 ----> ME extractor is done
+2022-01-01 19:44:35 ----> running  pre build
+2022-01-01 19:44:35 ----> Copied bootsplash.jpg
+2022-01-01 19:44:35 ----> Copied vbios.bin
+2022-01-01 19:44:35 ----> configure asemble parts -i ./build.sh -i
+2022-01-01 18:44:36 ----> Entering compile.sh -i scripts/compile.sh -i
+2022-01-01 18:44:36 ----> starting configuration edition of .config inside /home/sdk/t410/build
+2022-01-01 19:48:07 ----> checking for OUTPUT_DIR
+2022-01-01 19:48:07 ----> checking for BUILD_DIR
+2022-01-01 19:48:07 ----> BUILD_DIR exist...
+2022-01-01 19:48:07 ----> build_sdk.sh --> Docker SDK is prepared...
+2022-01-01 19:48:07 ----> checking whether Coreboot Framework is inside BUILD_DIR
+2022-01-01 19:48:07 ----> Coreboot Framework is not neccessary to clone...
+2022-01-01 19:48:07 ----> pre build parts
+2022-01-01 18:48:07 ----> Entering me_extract.sh
+2022-01-01 19:48:07 ----> ME extractor is done
+2022-01-01 19:48:07 ----> running  pre build
+2022-01-01 19:48:07 ----> Copied bootsplash.jpg
+2022-01-01 19:48:07 ----> Copied vbios.bin
+2022-01-01 19:48:07 ----> configure asemble parts -i ./build.sh -i
+2022-01-01 18:48:08 ----> Entering compile.sh -i scripts/compile.sh -i
+2022-01-01 18:48:08 ----> starting configuration edition of .config inside /home/sdk/t410/build
+2022-01-01 19:51:17 ----> checking for OUTPUT_DIR
+2022-01-01 19:51:17 ----> checking for BUILD_DIR
+2022-01-01 19:51:17 ----> BUILD_DIR exist...
+2022-01-01 19:51:17 ----> build_sdk.sh --> Docker SDK is prepared...
+2022-01-01 19:51:17 ----> checking whether Coreboot Framework is inside BUILD_DIR
+2022-01-01 19:51:17 ----> Coreboot Framework is not neccessary to clone...
+2022-01-01 19:51:17 ----> pre build parts
+2022-01-01 18:51:17 ----> Entering me_extract.sh
+2022-01-01 19:51:18 ----> ME extractor is done
+2022-01-01 19:51:18 ----> running  pre build
+2022-01-01 19:51:18 ----> Copied bootsplash.jpg
+2022-01-01 19:51:18 ----> Copied vbios.bin
+2022-01-01 19:51:18 ----> configure asemble parts -i ./build.sh -i
+2022-01-01 18:51:18 ----> Entering compile.sh -i scripts/compile.sh -i
+2022-01-01 18:51:18 ----> starting configuration edition of .config inside /home/sdk/t410/build
+2022-01-01 19:59:30 ----> entering to /home/palo/Dokumenty/projekty/coreboot/scripts/clean.sh -cd
+2022-01-01 19:59:30 ----> coreboot_sdk container is running, container ID: 28c8dd0dbf1e
+334e99ccf841
+2022-01-01 19:59:41 ----> deleting WORKER_DIR
+2022-01-01 19:59:41 ----> WORKER_DIR erased 0
+2022-01-01 19:59:41 ----> DOCKER_IMAGE erased, id: 16a06392b6da, status 0
+2022-01-01 19:59:48 ----> 0
+2022-01-01 20:00:11 ----> checking for OUTPUT_DIR
+2022-01-01 20:00:11 ----> checking for BUILD_DIR
+2022-01-01 20:00:11 ----> BUILD_DIR exist...
+2022-01-01 20:01:52 ----> build_sdk.sh --> Docker SDK is prepared...
+2022-01-01 20:01:52 ----> checking whether Coreboot Framework is inside BUILD_DIR
+2022-01-01 20:01:52 ----> Coreboot Framework is not neccessary to clone...
+2022-01-01 20:01:52 ----> pre build parts
+2022-01-01 19:01:53 ----> Entering me_extract.sh
+2022-01-01 20:01:53 ----> ME extractor is done
+2022-01-01 20:01:53 ----> running  pre build
+2022-01-01 20:01:53 ----> Copied bootsplash.jpg
+2022-01-01 20:01:53 ----> Copied vbios.bin
+2022-01-01 20:01:53 ----> configure asemble parts -i ./build.sh -i
+2022-01-01 19:01:53 ----> Entering compile.sh -i scripts/compile.sh -i
+2022-01-01 19:01:53 ----> starting configuration edition of .config inside /home/sdk/t410/build
+2022-01-01 20:12:33 ----> entering to /home/palo/Dokumenty/projekty/coreboot/scripts/clean.sh -cd
+2022-01-01 20:12:33 ----> coreboot_sdk container is running, container ID: f933c35313f2
+2022-01-01 20:12:43 ----> checking for OUTPUT_DIR
+2022-01-01 20:12:43 ----> checking for BUILD_DIR
+2022-01-01 20:12:43 ----> BUILD_DIR exist...
+2022-01-01 20:12:43 ----> deleting WORKER_DIR
+2022-01-01 20:12:43 ----> WORKER_DIR erased 0
+2022-01-01 20:12:44 ----> DOCKER_IMAGE erased, id: 4865a1c5b7e6, status 0
+2022-01-01 20:12:46 ----> 0
