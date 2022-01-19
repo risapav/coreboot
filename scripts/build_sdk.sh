@@ -21,9 +21,9 @@ if [[ -z $DOCKER_IMAGE_ID ]]; then
   else
     printf "Coreboot repository is already present\n"
   fi
-	
+
 	# coreboot-sdk is necessary to create
-	docker build $WORKER_DIR -t $DOCKER_CONTAINER_NAME
+	docker build $WORKER_DIR -t $DOCKER_CONTAINER_NAME --build-arg BUILD_DIR=$BUILD_DIR --build-arg COREBOOT_SDK_TAG=$COREBOOT_SDK_TAG --build-arg ARCH=$ARCH
 	if [[ $? -ne 0  ]]; then
 		echo "Docker image $DOCKER_CONTAINER_NAME can not create..."
 		exit 1

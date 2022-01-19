@@ -4,25 +4,24 @@
 set -e
 
 # import variables
+cd ~
 source ./scripts/variables.sh
+source ./scripts/utils.sh
 
-echolog "Entering compile.sh $@ $0 $1"
+e_timestamp "Entering compile.sh $@"
 
 ## Iterate through command line parameters
 while :
 do
     case "$1" in
-      --flash)
-        FLASH_AFTER_BUILD=true
-        shift 1;;
       -h | --help)
         usage
         exit 0;;
       -i | --config)
         COREBOOT_CONFIG=true
-        shift 1;;
+				break;;      
       -*)
-        echolog "Error: Unknown option: $1" >&2
+        e_error "Error: Unknown option: $1" >&2
         usage >&2
         exit 1;;
       *)
@@ -30,59 +29,46 @@ do
     esac
 done
 
+###
+if [ "$COREBOOT_CONFIG" ]; then
+  cd $BUILD_DIR
+  if [ -f "$BUILD_DIR/.config" ]; then
+      #start interactive tool
+      e_note "starting configurator of .config inside $PWD $TERM"		
+      make arch=$ARCH nconfig
+      make savedefconfig
+      update_config "$BUILD_DIR/defconfig"
+      exit 0
+  else
+      e_error "configuration file $BUILD_DIR/.config must exist, try run build.sh with no switches first"
+      exit 0
+  fi
+fi
 
 ######################
 ##   Copy config   ##
 ######################
 cd $BUILD_DIR
+update_config "$APP_DIR/defconfig"
+update_config "$BUILD_DIR/defconfig"
+update_config "$BUILD_DIR/configs/defconfig"
+    
 
-if [ -f "$BUILD_DIR/.config" ]; then
+################
+##  Config   ##
+###############
+e_note "prepare defconfig"
+make arch=$ARCH  defconfig
 
-	#start interactive tool
-  if [ "$COREBOOT_CONFIG" ]; then
-		#cd $APP_DIR
-export TERM=xterm	
-		echolog "starting configuration edition of .config inside $PWD"
-    make nconfig
-		exit 0
-  fi
+##############
+##   make   ##
+##############
+e_note "crossgcc for $ARCH"
+
+#make crossgcc-$ARCH CPUS=$(nproc)    
+#util/crossgcc/buildgcc -j $(nproc)
+#echo "iasl"
+#make arch=$ARCH iasl CPUS=$(nproc)    
+make arch=$ARCH CPUS=$(nproc)   
 	
-	echo "--> Using existing config $BUILD_DIR/.config"
-
-	# clean config to regenerate
-	make savedefconfig
-
-	if [ -e "$BUILD_DIR/defconfig" ]; then
-		mv -i "$BUILD_DIR/defconfig" "$OUTPUT_DIR/defconfig.old"
-	fi
-else
-	if [ -f "$APP_DIR/defconfig" ]; then
-		cp "$APP_DIR/defconfig" "$BUILD_DIR/configs/defconfig"
-		echo "--> Using config $APP_DIR/defconfig"
-	elif [ -f "$OUTPUT_DIR/defconfig.old" ]; then
-		cp "$OUTPUT_DIR/defconfig.old" "$BUILD_DIR/configs/defconfig"
-		echo "--> Using config $OUTPUT_DIR/defconfig.old"
-	else
-		make menuconfig
-		echo "--> Using config --> make menuconfig"
-	fi
-fi
-
-
-  ################
-  ##  Config   ##
-  ###############
-  make defconfig
-
-
-  ##############
-  ##   make   ##
-  ##############
-	echo "crossgcc for i386"
-	make crossgcc-i386 CPUS=$(nproc)    
-	util/crossgcc/buildgcc -j $(nproc)
-	echo "iasl"
-	make iasl CPUS=$(nproc)    
-  make CPUS=$(nproc)    
-	
-exit
+exit 0

@@ -4,14 +4,17 @@
 set -e
 
 # import variables
+cd ~
 source ./scripts/variables.sh
+source ./scripts/utils.sh
 
-echolog "Entering me_extract.sh"
+e_timestamp "Entering me_extract.sh"
+
 #######################
 ##   build ifdtool   ##
 #######################
 if [ ! -f "$BUILD_DIR/util/ifdtool/ifdtool" ]; then
-  # Make ifdtool
+  e_note "Make ifdtool"
   cd "$BUILD_DIR/util/ifdtool" || exit
   make
   chmod +x ifdtool || exit
@@ -24,7 +27,6 @@ if [ ! -d "$BUILD_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/" ]; then
   mkdir -p "$BUILD_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/"
 fi
 
-
 if [ ! -f "$BUILD_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/gbe.bin" ]; then
   cd "$BUILD_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/" || exit
 
@@ -36,6 +38,7 @@ if [ ! -f "$BUILD_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/gbe.bin" ]; the
   # unlock, extract blobs and rename
   ./ifdtool -u "$STOCK_BIOS_ROM" || exit
   ./ifdtool -x "$STOCK_BIOS_ROM" || exit
+  
   mv flashregion_0_flashdescriptor.bin descriptor.bin
   mv flashregion_2_intel_me.bin me.bin
   mv flashregion_3_gbe.bin gbe.bin
@@ -48,4 +51,4 @@ if [ ! -f "$BUILD_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/gbe.bin" ]; the
   rm flashregion_1_bios.bin
 fi
 
-exit
+exit 0
