@@ -1,6 +1,10 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-3.0+
 
+cd ~
+source ./scripts/variables.sh
+source ./scripts/utils.sh
+
 # part no.1
 # check for running docker
 if ! docker info > /dev/null 2>&1; then
