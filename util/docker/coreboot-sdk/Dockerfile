@@ -91,11 +91,17 @@ RUN \
 	cd coreboot && \
 	git checkout {{DOCKER_COMMIT}}; \
 	if echo {{CROSSGCC_PARAM}} | grep -q ^all; then \
-		make -C /tmp/coreboot/util/crossgcc/ build_clang \
-			BUILD_LANGUAGES=c,ada CPUS=$(nproc) DEST=/opt/xgcc; \
+		make -C /tmp/coreboot/util/crossgcc/ \
+			build_clang \
+			BUILD_LANGUAGES=c,ada \
+			CPUS=$(nproc) \
+			DEST=/opt/xgcc; \
 	fi; \
-	make -C /tmp/coreboot/util/crossgcc/ {{CROSSGCC_PARAM}} \
-		BUILD_LANGUAGES=c,ada CPUS=$(nproc) DEST=/opt/xgcc && \
+	make -C /tmp/coreboot/util/crossgcc/ \
+		{{CROSSGCC_PARAM}} \
+		BUILD_LANGUAGES=c,ada \
+		CPUS=$(nproc) \
+		DEST=/opt/xgcc && \
 	mkdir /home/coreboot/.ccache && \
 	chown coreboot:coreboot /home/coreboot/.ccache && \
 	mkdir /home/coreboot/cb_build && \
