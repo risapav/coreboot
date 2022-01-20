@@ -8,6 +8,8 @@ set -e
 source ./scripts/variables.sh
 source ./scripts/utils.sh
 
+e_timestamp "Entering build.sh"
+
 ## Help menu
 usage()
 {
