@@ -128,7 +128,7 @@ if [ "$TO_BUILD_SDK" ]; then
 #  make docker-build-coreboot BUILD_CMD="/bin/bash -l"
 #        $SCRIPT_DIR/build_sdk.sh
   cd util/docker
-  make coreboot-sdk COREBOOT_CROSSGCC_PARAM="build-x64 build_gcc build_iasl build_nasm"
+  make coreboot-sdk COREBOOT_CROSSGCC_PARAM=$COREBOOT_CROSSGCC_PARAM
   exit 0
 fi
 
