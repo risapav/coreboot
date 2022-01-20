@@ -187,7 +187,7 @@ fi
 
 ###
 e_header "pokus o kompilovanie"
-make docker-run-local SCRIPT=$DOCKER_ROOT/scripts/compile.sh 
+make docker-run-local SCRIPT=$DOCKER_ROOT/scripts/compile.sh CONFIG_CCACHE=y
 
 ### 
 e_header "post build parts"
