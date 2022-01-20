@@ -13,24 +13,24 @@ e_timestamp "Entering compile.sh $@"
 ## Iterate through command line parameters
 while :
 do
-    case "$1" in
-      -h | --help)
-        usage
-        exit 0;;
-      -i | --config)
+  case "$1" in
+    -h | --help)
+      usage
+      exit 0;;
+    -i | --config)
         COREBOOT_CONFIG=true
-				break;;      
-      -*)
+        break;;      
+    -*)
         e_error "Error: Unknown option: $1" >&2
         usage >&2
         exit 1;;
-      *)
+    *)
         break;;
     esac
 done
 
 ###
-if [ "$COREBOOT_CONFIG" ]; then
+if [ "$TO_CONFIGURE" ]; then
   cd $BUILD_DIR
   if [ -f "$BUILD_DIR/.config" ]; then
       #start interactive tool
