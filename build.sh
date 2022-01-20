@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0+
 
 # to show where in script the error is
-set -e
+set -xe
 
 # import variabl
 source ./scripts/variables.sh
