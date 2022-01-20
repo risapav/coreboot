@@ -102,13 +102,15 @@ RUN \
 	chown coreboot:coreboot /home/coreboot/cb_build && \
 	echo "export PATH=$PATH:/opt/xgcc/bin" >> /home/coreboot/.bashrc && \
 	echo "export SDK_VERSION={{SDK_VERSION}}" >> /home/coreboot/.bashrc && \
-	echo "export SDK_COMMIT={{DOCKER_COMMIT}}" >> /home/coreboot/.bashrc && \		
-	cd /tmp/coreboot/util/xcompile && \
-	./xcompile /opt/xgcc/bin > /home/coreboot/.xcompile && \	
-  cd /opt/xgcc/bin && \
-	for t in $(find . -type f -name *gcc*); do ln -vs /usr/bin/ccache /usr/local/bin/$t; done && \
-	for t in $(find . -type f -name *cpp*); do ln -vs /usr/bin/ccache /usr/local/bin/$t; done && \
+	echo "export SDK_COMMIT={{DOCKER_COMMIT}}" >> /home/coreboot/.bashrc && \	
 	rm -rf /tmp/coreboot
+	
+#	cd /tmp/coreboot/util/xcompile && \
+#	./xcompile /opt/xgcc/bin > /home/coreboot/.xcompile && \	
+#  cd /opt/xgcc/bin && \
+#	for t in $(find . -type f -name *gcc*); do ln -vs /usr/bin/ccache /usr/local/bin/$t; done && \
+#	for t in $(find . -type f -name *cpp*); do ln -vs /usr/bin/ccache /usr/local/bin/$t; done && \
+#	rm -rf /tmp/coreboot
 
 ENV PATH $PATH:/opt/xgcc/bin
 ENV SDK_VERSION={{SDK_VERSION}}
