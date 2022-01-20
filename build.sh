@@ -4,8 +4,6 @@
 # to show where in script the error is
 set -e
 
-echo "Entering build.sh"
-
 # import variabl
 source ./scripts/variables.sh
 source ./scripts/utils.sh
