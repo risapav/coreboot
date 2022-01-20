@@ -1,8 +1,8 @@
-#!/bin/bash
+﻿#!/bin/bash
 # SPDX-License-Identifier: GPL-3.0+
 
 # to show where in script the error is
-set -xe
+set -e
 
 # import variabl
 source ./scripts/variables.sh
@@ -127,8 +127,9 @@ if [ "$TO_BUILD_SDK" ]; then
   e_header "building docker container with toolchain"
 #  make docker-build-coreboot BUILD_CMD="/bin/bash -l"
 #        $SCRIPT_DIR/build_sdk.sh
-  cd util/docker
-  make coreboot-sdk COREBOOT_CROSSGCC_PARAM=$COREBOOT_CROSSGCC_PARAM
+  cd $ROOT_DIR/util/docker
+  e_warning "$COREBOOT_CROSSGCC_PARAM"
+  make coreboot-sdk COREBOOT_CROSSGCC_PARAM="$COREBOOT_CROSSGCC_PARAM"
   exit 0
 fi
 
@@ -136,8 +137,9 @@ fi
 e_header "checking for Coreboot SDK"
 if [[ -z $(ls -A $BUILD_DIR) ]]; then
   e_warning "cloning Coreboot framework from github"
-  git clone --branch $COREBOOT_SDK_TAG https://github.com/coreboot/coreboot $BUILD_DIR/
-  cd $BUILD_DIR
+  git clone https://review.coreboot.org/coreboot $BUILD_DIR/
+	cd $BUILD_DIR
+	git checkout $DOCKER_COMMIT
   git clone https://github.com/coreboot/blobs.git 3rdparty/blobs/ 
   git clone https://github.com/coreboot/intel-microcode.git 3rdparty/intel-microcode/ 
   git submodule update --init --recursive 

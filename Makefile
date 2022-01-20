@@ -1,4 +1,4 @@
-# xcompile
+﻿# xcompile
 xcompile=build/xcompile
 objutil=build/util
 
@@ -63,7 +63,7 @@ docker-run-local: test-docker $(DOCKER_CCACHE)
 		-e LINES=$(shell tput lines) \
 		-e TERM=$(TERM) \
 		-v $(CURDIR):/home/coreboot \
-		-v $(CURDIR)/ccache:/home/coreboot/.ccache \
+		-v $(CURDIR)/.ccache:/home/coreboot/.ccache \
 		--rm coreboot/coreboot-sdk:$(COREBOOT_IMAGE_TAG) \
 		$(SCRIPT)
 #		/bin/bash -c 'cd /home/coreboot && $(DOCKER_RUN_LOCAL)'

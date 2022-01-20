@@ -1,7 +1,9 @@
-#!/bin/bash
+﻿#!/bin/bash
 # SPDX-License-Identifier: GPL-3.0+
 
 # Allways called from host side script, must not be called from docker container !
+
+source ./scripts/utils.sh
 
 e_timestamp "Entering to $0 $1"
 ## Iterate through command line parameters
@@ -30,7 +32,6 @@ do
   esac
 done
 
-#echolog "$CLEAN_CONFIG $CLEAN_BUILD $CLEAN_DOCKER"
 #clean config
 if [[ -n $CLEAN_CONFIG ]]; then
   rm -f $BUILD_DIR/.config
@@ -55,19 +56,19 @@ if [[ -n $CLEAN_DOCKER ]]; then
   fi
   # part no.3 todo reusing docker proces
   # zisti ci kontajner je spusteny, ak nie spusti ho
-  DOCKER_CONTAINER_ID=$( docker ps --format "{{.ID}}" --filter ancestor=$DOCKER_CONTAINER_NAME )
+  DOCKER_CONTAINER_ID=$( docker ps --format "{{.ID}}" --filter ancestor=$DOCKER_CONTAINER_NAME ) 
   if [[ -n $DOCKER_CONTAINER_ID ]]; then
     if [ "$( docker container inspect -f '{{.State.Status}}' $DOCKER_CONTAINER_NAME )" == "running" ]; then 
-      e_error "coreboot_sdk is not running..."
+      e_error "$DOCKER_CONTAINER_NAME is not running..."
     else
-      e_success "coreboot_sdk container is running, container ID: $DOCKER_CONTAINER_ID"
+      e_success "$DOCKER_CONTAINER_NAME container is running, container ID: $DOCKER_CONTAINER_ID"
       docker stop $DOCKER_CONTAINER_ID
     fi		
   else
-    e_error "docker container coreboot_sdk is not running"
+    e_error "docker container $DOCKER_CONTAINER_NAME is not running"
   fi
   # check if docker image coreboot-sdk is created
-  # DOCKER_IMAGE_ID=$( docker images --format "{{.ID}}" --filter=reference=$DOCKER_CONTAINER_NAME )
+  DOCKER_IMAGE_ID=$( docker images --format "{{.ID}}" --filter=reference=$DOCKER_CONTAINER_NAME )
   # check for WORKER_DIR
   if [[ ! -d $WORKER_DIR ]]; then
     e_error "WORKER_DIR is not present"
@@ -83,7 +84,7 @@ if [[ -n $CLEAN_DOCKER ]]; then
     docker system prune -f
     e_note "$?"
   else
-    e_note "there is not coreboot_sdk image to erase"
+    e_note "there is no $DOCKER_CONTAINER_NAME image to erase"
   fi
 fi
 

@@ -1,4 +1,4 @@
-# This dockerfile is not meant to be used directly by docker.  The
+﻿# This dockerfile is not meant to be used directly by docker.  The
 # {{}} variables are replaced with values by the makefile.  Please generate
 # the docker image for this file by running:
 #
@@ -14,6 +14,8 @@
 
 FROM debian:sid AS coreboot-sdk
 MAINTAINER Martin Roth <martin@coreboot.org>
+
+ARG DEBIAN_FRONTEND=noninteractive
 
 RUN \
 	useradd -p locked -m coreboot && \
@@ -123,22 +125,22 @@ ENV SDK_VERSION={{SDK_VERSION}}
 ENV SDK_COMMIT={{DOCKER_COMMIT}}
 USER coreboot
 
-FROM coreboot-sdk
+#FROM coreboot-sdk
 # Test the built image
-RUN mkdir -p /tmp/work && \
-  cd /tmp/work && \
-  git clone https://review.coreboot.org/bios_extract.git && \
-  make -C bios_extract && \
-  git clone https://review.coreboot.org/memtest86plus.git && \
-  make -C memtest86plus && \
-  git clone https://review.coreboot.org/flashrom.git && \
-  CONFIG_EVERYTHING=yes make -C flashrom && \
-  git clone https://review.coreboot.org/em100.git && \
-  make -C em100 && \
-  git clone https://review.coreboot.org/coreboot.git && \
-  (cd coreboot && git submodule update --init --checkout )
+#RUN mkdir -p /tmp/work && \
+#  cd /tmp/work && \
+#  git clone https://review.coreboot.org/bios_extract.git && \
+#  make -C bios_extract && \
+#  git clone https://review.coreboot.org/memtest86plus.git && \
+#  make -C memtest86plus && \
+#  git clone https://review.coreboot.org/flashrom.git && \
+#  CONFIG_EVERYTHING=yes make -C flashrom && \
+#  git clone https://review.coreboot.org/em100.git && \
+#  make -C em100 && \
+#  git clone https://review.coreboot.org/coreboot.git && \
+#  (cd coreboot && git submodule update --init --checkout )
   ### && \
-  ### make -C coreboot CPUS=$(nproc) test-abuild
+  ### make -C coreboot CPUS=$(nproc) test-abuild
 
 ### RUN \
 ###  cd /tmp/work && \

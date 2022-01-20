@@ -1,4 +1,4 @@
-#!/bin/bash
+﻿#!/bin/bash
 # SPDX-License-Identifier: GPL-3.0+
 set -e
 
@@ -10,7 +10,7 @@ export DOCKER_CONTAINER_NAME="coreboot/coreboot-sdk"
 
 export COREBOOT_IMAGE_TAG="2021-12-29_ce134ababd"
 export DOCKER_COMMIT="e565f75221"
-export COREBOOT_CROSSGCC_PARAM="build-arm build-i386 build-x64 build_gcc build_iasl build_nasm"
+export COREBOOT_CROSSGCC_PARAM="build-arm build-riscv build-i386 build-x64 build_gcc build_iasl build_nasm"
 
 ## log file
 export LOG_FILE="log.txt"
