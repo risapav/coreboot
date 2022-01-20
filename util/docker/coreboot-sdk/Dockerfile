@@ -154,5 +154,5 @@ RUN mkdir -p /tmp/work && \
 #  cd && \
 #  rm -rf /tmp/work/
 
-FROM coreboot-sdk
-VOLUME /home/coreboot
+# FROM coreboot-sdk
+# VOLUME /home/coreboot
