@@ -69,6 +69,6 @@ e_note "crossgcc for $ARCH"
 #util/crossgcc/buildgcc -j $(nproc)
 #echo "iasl"
 #make arch=$ARCH iasl CPUS=$(nproc)    
-make arch=$ARCH CPUS=$(nproc)   
+make CPUS=$(nproc)   
 	
 exit 0
