@@ -10,9 +10,6 @@ echo "Entering build.sh"
 source ./scripts/variables.sh
 source ./scripts/utils.sh
 
-# export COREBOOT_CONFIG=false
-
-
 ## Help menu
 usage()
 {
@@ -47,7 +44,7 @@ while :
 do
     case "$1" in
       -bd | --build-sdk)  
-        COREBOOT_BUILD=true
+        TO_BUILD_SDK=true
         break;;      
       -ca | --clean-all)  
         $SCRIPT_DIR/clean.sh -ca
@@ -78,8 +75,8 @@ do
         print_supported
         exit 0;;
       -i | --config)
-        COREBOOT_CONFIG=true
-				break;;
+        TO_CONFIGURE=true
+        break;;
       -t | --tag)
         COREBOOT_TAG="$2"
         shift 2;;
@@ -92,10 +89,11 @@ do
         break;;
     esac
 done
+
 ###
 if [ -n "$PRINTSUPPORTED" ]; then
-	print_supported
-	exit 0
+  print_supported
+  exit 0
 fi
 
 ###
@@ -106,8 +104,8 @@ if [ ! -d "$OUTPUT_DIR" ]; then
 fi
 
 if [[ $? -ne 0  ]]; then
-	e_error "OUTPUT_DIR not exist !"
-	exit 1
+  e_error "OUTPUT_DIR not exist !"
+  exit 1
 else
   e_success "OUTPUT_DIR exist..."
 fi
@@ -117,80 +115,71 @@ if [ ! -d "$BUILD_DIR" ]; then
 fi
 
 if [[ $? -ne 0  ]]; then
-	e_error "BUILD_DIR not exist !"
-	exit 1
+  e_error "BUILD_DIR not exist !"
+  exit 1
 else
   e_success "BUILD_DIR exist..."
 fi
 ###
 
-
-###
-if [ "$COREBOOT_BUILD" ]; then
-  e_note "starting configurator of .config inside $PWD"		
+### check for coreboot-sdk
+if [ "$TO_BUILD_SDK" ]; then
+  e_header "building docker container with toolchain"
 #  make docker-build-coreboot BUILD_CMD="/bin/bash -l"
 #        $SCRIPT_DIR/build_sdk.sh
   cd util/docker
-#        make coreboot-sdk COREBOOT_CROSSGCC_PARAM="build-arm build-i386 build-x64 build_gcc build_iasl build_nasm"
   make coreboot-sdk COREBOOT_CROSSGCC_PARAM="build-x64 build_gcc build_iasl build_nasm"
   exit 0
 fi
 
-
-
 ###
 e_header "checking for Coreboot SDK"
 if [[ -z $(ls -A $BUILD_DIR) ]]; then
-	e_warning "cloning Coreboot framework from github"
-	git clone --branch $COREBOOT_SDK_TAG https://github.com/coreboot/coreboot $BUILD_DIR/
-	cd $BUILD_DIR
-	git clone https://github.com/coreboot/blobs.git 3rdparty/blobs/ 
-	git clone https://github.com/coreboot/intel-microcode.git 3rdparty/intel-microcode/ 
+  e_warning "cloning Coreboot framework from github"
+  git clone --branch $COREBOOT_SDK_TAG https://github.com/coreboot/coreboot $BUILD_DIR/
+  cd $BUILD_DIR
+  git clone https://github.com/coreboot/blobs.git 3rdparty/blobs/ 
+  git clone https://github.com/coreboot/intel-microcode.git 3rdparty/intel-microcode/ 
   git submodule update --init --recursive 
   e_success "Coreboot Framework is cloned..."
 else
    e_success "Coreboot Framework is not neccessary to clone..."
 fi
 
-###
-e_note "--> checking for Docker SDK"
-### $SCRIPT_DIR/build_sdk.sh 
-#cd $BUILD_DIR/util/docker
-#make coreboot-sdk COREBOOT_CROSSGCC_PARAM="build_gcc build_iasl build_clang build_make build_nasm"
-
 ### COREBOOT_CROSSGCC_PARAM=
 
 
-if [[ $? -ne 0  ]]; then
-	e_error "build_sdk.sh --> Docker SDK is not prepared !"
-	exit 1
-else
-  e_success "build_sdk.sh --> Docker SDK is prepared..."
-fi
+#if [[ $? -ne 0  ]]; then
+#	e_error "build_sdk.sh --> Docker SDK is not prepared !"
+#	exit 1
+#else
+#  e_success "build_sdk.sh --> Docker SDK is prepared..."
+#fi
 
 ###
 e_header "pre build parts"
+e_note "starting ME tool"
 make docker-run-local SCRIPT=$DOCKER_ROOT/scripts/me_extract.sh  
 e_success "ME extractor is done"
 
 ###
 e_note "copying files from STOCK_BIOS_DIR"
 if [ -f "$STOCK_BIOS_DIR/$BOOTSPLASH" ]; then
-	cp "$STOCK_BIOS_DIR/$BOOTSPLASH" "$BUILD_DIR/$BOOTSPLASH"
-	e_success "Copied $BOOTSPLASH"
+  cp "$STOCK_BIOS_DIR/$BOOTSPLASH" "$BUILD_DIR/$BOOTSPLASH"
+  e_success "Copied $BOOTSPLASH"
 else
-	e_warning "Missing $BOOTSPLASH which shoul be inside STOCK_BIOS_DIR> $(ls -la $STOCK_BIOS_DIR)"
+  e_warning "Missing $BOOTSPLASH which shoul be inside STOCK_BIOS_DIR> $(ls -la $STOCK_BIOS_DIR)"
 fi
 
 if [ -f "$STOCK_BIOS_DIR/$VBIOS_ROM" ]; then
-	cp "$STOCK_BIOS_DIR/$VBIOS_ROM"  "$BUILD_DIR/$VBIOS_ROM"
-	e_success "Copied $VBIOS_ROM"
+  cp "$STOCK_BIOS_DIR/$VBIOS_ROM"  "$BUILD_DIR/$VBIOS_ROM"
+  e_success "Copied $VBIOS_ROM"
 else
-	e_warning "Missing $VBIOS_ROM which shoul be inside STOCK_BIOS_DIR> $(ls -la $STOCK_BIOS_DIR)"
+  e_warning "Missing $VBIOS_ROM which shoul be inside STOCK_BIOS_DIR> $(ls -la $STOCK_BIOS_DIR)"
 fi
 
 ###
-if [ "$COREBOOT_CONFIG" ]; then
+if [ "$TO_CONFIGURE" ]; then
   e_note "starting configurator of .config inside $PWD"		
   make docker-run-local SCRIPT="$DOCKER_ROOT/scripts/compile.sh $1" 
   exit 0
@@ -204,11 +193,11 @@ make docker-run-local SCRIPT=$DOCKER_ROOT/scripts/compile.sh
 e_header "post build parts"
 ## copy compilation results to out DIR, save config file
 if [ ! -f "$BUILD_DIR/build/coreboot.rom" ]; then
-	e_error "coreboot.rom as output of compile is missing..."
-	exit 1;
+  e_error "coreboot.rom as output of compile is missing..."
+  exit 1;
 else
-	cp -f "$BUILD_DIR/build/coreboot.rom" "$OUTPUT_DIR/coreboot.rom"
-	cp -f "$BUILD_DIR/.config" "$OUTPUT_DIR/latest.config"
+  cp -f "$BUILD_DIR/build/coreboot.rom" "$OUTPUT_DIR/coreboot.rom"
+  cp -f "$BUILD_DIR/.config" "$OUTPUT_DIR/latest.config"
   cp -f "$BUILD_DIR/defconfig" "$OUTPUT_DIR/defconfig"
   e_note "coreboot.rom and .config files are copied inside OUTPUT_DIR"
 fi
