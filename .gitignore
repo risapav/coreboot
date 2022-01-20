@@ -3,3 +3,12 @@
 coreboot_*
 coverage/
 */worker/
+
+# VSCode IDE
+.vscode/*
+!.vscode/README.md
+!.vscode/settings.json.default
+*.code-workspace
+
+*/.ccache/
+*/ccache/
