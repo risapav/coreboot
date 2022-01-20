@@ -1,10 +1,7 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-3.0+
 
-# import variables
-#cd ~
-source ./scripts/variables.sh
-source ./scripts/utils.sh
+# Allways called from host side script, must not be called from docker container !
 
 e_timestamp "Entering to $0 $1"
 ## Iterate through command line parameters
