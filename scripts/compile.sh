@@ -18,7 +18,7 @@ do
       usage
       exit 0;;
     -i | --config)
-        COREBOOT_CONFIG=true
+        TO_CONFIGURE=true
         break;;      
     -*)
         e_error "Error: Unknown option: $1" >&2
@@ -35,7 +35,7 @@ if [ "$TO_CONFIGURE" ]; then
   if [ -f "$BUILD_DIR/.config" ]; then
       #start interactive tool
       e_note "starting configurator of .config inside $PWD $TERM"		
-      make arch=$ARCH nconfig
+      make nconfig
       make savedefconfig
       update_config "$BUILD_DIR/defconfig"
       exit 0
@@ -58,7 +58,7 @@ update_config "$BUILD_DIR/configs/defconfig"
 ##  Config   ##
 ###############
 e_note "prepare defconfig"
-make arch=$ARCH  defconfig
+make defconfig
 
 ##############
 ##   make   ##
