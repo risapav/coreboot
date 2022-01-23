@@ -1,5 +1,6 @@
-*/build/
-*/stock_bios/
+*/build/*
+
+stock_bios/*
 !stock_bios/*.sh
 
 coreboot_*
@@ -15,9 +16,9 @@ coverage/
 */ccache/
 */.config/
 
-*/output/
+output/*
 !output/*.sh
 
-*/cb_build/
+cb_build/*
 
 .bash_history
