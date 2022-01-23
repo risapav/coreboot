@@ -1,8 +1,9 @@
 */build/
 */stock_bios/
+!stock_bios/*.sh
+
 coreboot_*
 coverage/
-*/worker/
 
 # VSCode IDE
 .vscode/*
@@ -12,5 +13,11 @@ coverage/
 
 */.ccache/
 */ccache/
+*/.config/
 
+*/output/
+!output/*.sh
 
+*/cb_build/
+
+.bash_history

@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 # SPDX-License-Identifier: GPL-3.0+
 
 # Allways called from host side script, must not be called from docker container !

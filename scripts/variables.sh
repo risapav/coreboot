@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 # SPDX-License-Identifier: GPL-3.0+
 set -e
 
@@ -21,7 +21,8 @@ export LOG_FILE="log.txt"
 export MAINBOARD="lenovo"
 
 ## mainboard model
-export MODEL="t410"
+#export MODEL="t410"
+export MODEL="t430"
 
 ## original bios to extract ME from
 export STOCK_BIOS_ROM="stock_bios.bin"
@@ -47,11 +48,12 @@ export HOST_ROOT="."
 export DOCKER_ROOT="/home/coreboot"
 export ROOT_DIR=$PWD
 #export ROOT_DIR=$DOCKER_ROOT
-export WORKER_DIR="$ROOT_DIR/worker"
+
 export SCRIPT_DIR="$ROOT_DIR/scripts"
 export APP_DIR="$ROOT_DIR/$MODEL"
-#export BUILD_DIR="$ROOT_DIR/.ccache"
-export BUILD_DIR="$ROOT_DIR/$MODEL/build"
+export CCACHE_DIR="$ROOT_DIR/.ccache"
+export CONFIG_DIR="$ROOT_DIR/.config"
+export BUILD_DIR="$ROOT_DIR/cb_build"
 export OUTPUT_DIR="$ROOT_DIR/$MODEL/output"
 export STOCK_BIOS_DIR="$ROOT_DIR/$MODEL/stock_bios"
 
@@ -76,9 +78,6 @@ export FLASH_MEMORY="MX25L6405D"
 
 function update_config()
 (
-	if [ "${1}"  -nt "$BUILD_DIR/defconfig" ]; then
-		cp -fv "${1}" "$BUILD_DIR/defconfig"
-	fi
 	if [ "${1}" -nt "$BUILD_DIR/configs/defconfig" ]; then
 		cp -fv "${1}" "$BUILD_DIR/configs/defconfig"
 	fi
