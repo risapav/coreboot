@@ -1,7 +1,7 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-3.0+
 
-set -xe
+set -e
 # set -e
 
 # import variables
@@ -35,10 +35,10 @@ done
 ######################
 ##   Copy config   ##
 ######################
-cd $BUILD_DIR
+cd $DOCKER_BUILD_DIR
 # ak je $APP_DIR/defconfig novsi ako $BUILD_DIR/configs/defconfig
-if [ "$APP_DIR/defconfig" -nt "$BUILD_DIR/configs/defconfig" ]; then
-  update_config "$APP_DIR/defconfig"
+if [ "$DOCKER_APP_DIR/defconfig" -nt "$DOCKER_BUILD_DIR/configs/defconfig" ]; then
+  update_config "$DOCKER_APP_DIR/defconfig"
 fi
 
 
@@ -48,16 +48,16 @@ fi
 
 ###
 if [ "$TO_CONFIGURE" ]; then
-  cd $BUILD_DIR
-  if [ -f "$BUILD_DIR/.config" ]; then
+  cd $DOCKER_BUILD_DIR
+  if [ -f "$DOCKER_BUILD_DIR/.config" ]; then
       #start interactive tool
       e_note "starting configurator of .config inside $PWD $TERM"		
-      make nconfig top=$BUILD_DIR
-      make savedefconfig top=$BUILD_DIR
-      update_config "$BUILD_DIR/defconfig"
+      make nconfig
+      make savedefconfig
+      update_config "$DOCKER_BUILD_DIR/defconfig"
       exit 0
   else
-      e_error "configuration file $BUILD_DIR/.config must exist, try run build.sh with no switches first"
+      e_error "configuration file $DOCKER_BUILD_DIR/.config must exist, try run build.sh with no switches first"
       exit 0
   fi
 fi
@@ -69,7 +69,8 @@ fi
 ##  Config   ##
 ###############
 e_note "prepare defconfig"
-make defconfig top=$BUILD_DIR
+cd $DOCKER_BUILD_DIR
+make defconfig
 
 ##############
 ##   make   ##
@@ -78,8 +79,9 @@ e_note "crossgcc for $ARCH"
 
 #make crossgcc-$ARCH CPUS=$(nproc)    
 #util/crossgcc/buildgcc -j $(nproc)
-#echo "iasl"
-#make arch=$ARCH iasl CPUS=$(nproc)    
-make CPUS=$(nproc)   top=$BUILD_DIR
+cd $DOCKER_BUILD_DIR
+make CPUS=$(nproc) 
+
+#ARCH=$ARCH obj="cb_build"
 	
 exit 0

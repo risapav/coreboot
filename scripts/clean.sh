@@ -34,16 +34,16 @@ done
 
 #clean config
 if [[ -n $CLEAN_CONFIG ]]; then
-  rm -f $BUILD_DIR/.config
-  e_success "BUILD_DIR/.config erased $?"
+  rm -f $HOST_BUILD_DIR/.config
+  e_success "$HOST_BUILD_DIR/.config erased $?"
 fi		
 
 #clean build
 if [[ -n $CLEAN_BUILD ]]; then
   #remove all files, include hidden files, no prompt
-  #rm -rf $BUILD_DIR/{*,.*}
-  rm -rf $BUILD_DIR/
-  e_success "BUILD_DIR erased $?"
+  #rm -rf $HOST_BUILD_DIR/{*,.*}
+  rm -rf $HOST_BUILD_DIR/
+  e_success "$HOST_BUILD_DIR erased $?"
 fi
 
 #clear docker
@@ -69,14 +69,7 @@ if [[ -n $CLEAN_DOCKER ]]; then
   fi
   # check if docker image coreboot-sdk is created
   DOCKER_IMAGE_ID=$( docker images --format "{{.ID}}" --filter=reference=$DOCKER_CONTAINER_NAME )
-  # check for WORKER_DIR
-  if [[ ! -d $WORKER_DIR ]]; then
-    e_error "WORKER_DIR is not present"
-  else
-    e_note "deleting WORKER_DIR"
-    rm -rf $WORKER_DIR
-    e_success "WORKER_DIR erased $?"
-  fi
+
   # check for existing docker image
   if [[ -n $DOCKER_IMAGE_ID ]]; then
     docker rmi -f $DOCKER_IMAGE_ID

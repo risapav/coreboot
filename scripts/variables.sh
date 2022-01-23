@@ -17,6 +17,8 @@ export LOG_FILE="log.txt"
 ################################################################################
 ## MODEL VARIABLES
 ################################################################################
+
+export ARCH="i386" 
 ## maiboard vendor
 export MAINBOARD="lenovo"
 
@@ -36,26 +38,35 @@ export BOOTSPLASH="bootsplash.jpg"
 ################################################################################
 ## project tree
 ################################################################################
-# $PRJ                   - root       dir
-# $PRJ/sdk               - coreboot   dir in docker container
-# $PRJ/script            - script     dir
-# $PRJ/$MODEL            - app        dir 
-# $PRJ/$MODEL/build      - build      dir 
-# $PRJ/$MODEL/output     - output     dir
-# $PRJ/$MODEL/stock_bios - stock_bios dir
+## $PRJ                   - root       dir
+## $PRJ/sdk               - coreboot   dir in docker container
+## $PRJ/script            - script     dir
+## $PRJ/$MODEL            - app        dir 
+## $PRJ/$MODEL/build      - build      dir 
+## $PRJ/$MODEL/output     - output     dir
+## $PRJ/$MODEL/stock_bios - stock_bios dir
 ################################################################################
-export HOST_ROOT="."
-export DOCKER_ROOT="/home/coreboot"
-export ROOT_DIR=$PWD
-#export ROOT_DIR=$DOCKER_ROOT
+export APP_DIR="$MODEL"
+export BUILD_DIR="cb_build"
+export CCACHE_DIR=".ccache"
+export SCRIPT_DIR="scripts"
+export OUTPUT_DIR="$APP_DIR/output"
+export STOCK_BIOS_DIR="$APP_DIR/stock_bios"
 
-export SCRIPT_DIR="$ROOT_DIR/scripts"
-export APP_DIR="$ROOT_DIR/$MODEL"
-export CCACHE_DIR="$ROOT_DIR/.ccache"
-export CONFIG_DIR="$ROOT_DIR/.config"
-export BUILD_DIR="$ROOT_DIR/cb_build"
-export OUTPUT_DIR="$ROOT_DIR/$MODEL/output"
-export STOCK_BIOS_DIR="$ROOT_DIR/$MODEL/stock_bios"
+
+export HOST_ROOT_DIR="$PWD"
+export HOST_APP_DIR="$HOST_ROOT_DIR/$APP_DIR"
+export HOST_BUILD_DIR="$HOST_ROOT_DIR/$BUILD_DIR"
+export HOST_CCACHE_DIR="$HOST_ROOT_DIR/$CCACHE_DIR"
+export HOST_SCRIPT_DIR="$HOST_ROOT_DIR/$SCRIPT_DIR"
+export HOST_STOCK_BIOS_DIR="$HOST_ROOT_DIR/$STOCK_BIOS_DIR"
+
+export DOCKER_ROOT_DIR="/home/coreboot"
+export DOCKER_APP_DIR="$DOCKER_ROOT_DIR/$APP_DIR"
+export DOCKER_BUILD_DIR="$DOCKER_ROOT_DIR/$BUILD_DIR"
+export DOCKER_CCACHE_DIR="$DOCKER_ROOT_DIR/$CCACHE_DIR"
+export DOCKER_SCRIPT_DIR="$DOCKER_ROOT_DIR/$SCRIPT_DIR"
+export DOCKER_STOCK_BIOS_DIR="$DOCKER_ROOT_DIR/$STOCK_BIOS_DIR"
 
 ################################################################################
 ## toopchain variables
@@ -78,10 +89,10 @@ export FLASH_MEMORY="MX25L6405D"
 
 function update_config()
 (
-	if [ "${1}" -nt "$BUILD_DIR/configs/defconfig" ]; then
-		cp -fv "${1}" "$BUILD_DIR/configs/defconfig"
+	if [ "${1}" -nt "$HOST_BUILD_DIR/configs/defconfig" ]; then
+		cp -fv "${1}" "$HOST_BUILD_DIR/configs/defconfig"
 	fi
-	rm -fv "$BUILD_DIR/.config"
+	rm -fv "$HOST_BUILD_DIR/.config"
 )
 
 print_supported() {

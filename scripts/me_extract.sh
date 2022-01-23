@@ -8,14 +8,14 @@ cd ~
 source ./scripts/variables.sh
 source ./scripts/utils.sh
 
-e_timestamp "Entering me_extract.sh"
+e_timestamp "Entering me_extract.sh $PWD $DOCKER_BUILD_DIR/util/ifdtool"
 
 #######################
 ##   build ifdtool   ##
 #######################
-if [ ! -f "$BUILD_DIR/util/ifdtool/ifdtool" ]; then
+cd "$DOCKER_BUILD_DIR/util/ifdtool"
+if [ ! -f "ifdtool" ]; then
   e_note "Make ifdtool"
-  cd "$BUILD_DIR/util/ifdtool" || exit
   make
   chmod +x ifdtool || exit
 fi
@@ -23,17 +23,17 @@ fi
 ###################################################################################
 ##  Extract Intel ME firmware, Gigabit Ethernet firmware, flash descriptor, etc  ##
 ###################################################################################
-if [ ! -d "$BUILD_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/" ]; then
-  mkdir -p "$BUILD_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/"
+if [ ! -d "$DOCKER_BUILD_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/" ]; then
+  mkdir -p "$DOCKER_BUILD_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/"
 fi
 
-if [ ! -f "$BUILD_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/gbe.bin" ]; then
-  cd "$BUILD_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/" || exit
+if [ ! -f "$DOCKER_BUILD_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/gbe.bin" ]; then
+  cd "$DOCKER_BUILD_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/" || exit
 
-  cp "$BUILD_DIR/util/ifdtool/ifdtool" .
+  cp "$DOCKER_BUILD_DIR/util/ifdtool/ifdtool" .
 
   # ALWAYS COPY THE ORIGINAL.  Never modified the original stock bios file
-  cp "$STOCK_BIOS_DIR/$STOCK_BIOS_ROM" .
+  cp "$DOCKER_STOCK_BIOS_DIR/$STOCK_BIOS_ROM" .
 
   # unlock, extract blobs and rename
   ./ifdtool -u "$STOCK_BIOS_ROM" || exit

@@ -53,19 +53,19 @@ docker-clean: clean-coreboot-containers
 	@$(MAKE) clean-coreboot-images
 
 $(DOCKER_CCACHE):
+	@echo "docker ccache $(DOCKER_CCACHE_DIR)"
 	@mkdir -p $@
 
 docker-run-local: test-docker $(DOCKER_CCACHE)
-	@echo "CURDIR=$(CURDIR) topdir=$(top)"
+	@echo "CURDIR=$(CURDIR) topdir=$(top) docker_build=$(DOCKER_BUILD_DIR)"
 	$(DOCKER) run \
 		-it \
 		-u $(UID):$(GID) \
 		-e COLUMNS=$(shell tput cols) \
 		-e LINES=$(shell tput lines) \
 		-e TERM=$(TERM) \
-		-v $(CURDIR):/home/coreboot \
-		-v $(CURDIR)/cb_build:/home/coreboot/cb_build \
-		-v $(CURDIR)/.ccache:/home/coreboot/.ccache \
+		-v $(HOST_ROOT_DIR):$(DOCKER_ROOT_DIR) \
+		-v $(HOST_BUILD_DIR):$(DOCKER_BUILD_DIR) \
 		--rm coreboot/coreboot-sdk:$(COREBOOT_IMAGE_TAG) \
 		$(SCRIPT)
 
@@ -73,9 +73,8 @@ docker-shell: USER=coreboot
 docker-shell: test-docker
 	$(DOCKER) run -u $(USER) -it  \
 		-u $(UID):$(GID) \
-		-v $(CURDIR):/home/coreboot \
-		-v $(CURDIR)/cb_build:/home/coreboot/cb_build \
-		-v $(CURDIR)/.ccache:/home/coreboot/.ccache \
+		-v $(HOST_ROOT_DIR):$(DOCKER_ROOT_DIR) \
+		-v $(HOST_BUILD_DIR):$(DOCKER_BUILD_DIR) \
 		-e COLUMNS=$(shell tput cols) -e LINES=$(shell tput lines) -e TERM=$(TERM) \
 		-w /home/coreboot \
 		--rm coreboot/coreboot-sdk:$(COREBOOT_IMAGE_TAG) \
