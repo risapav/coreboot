@@ -63,4 +63,5 @@ if [ ! -f "intelmetool" ]; then
   chmod +x intelmetool || exit
 fi
 
+e_success "--> Exiting $0, work is done"
 exit 0
