@@ -2,6 +2,13 @@
 # SPDX-License-Identifier: GPL-3.0+
 set -e
 
+function err_report() {
+    echo "!!! -----> Error on line $1 <----- !!!"
+    awk 'NR>L-4 && NR<L+4 { printf "%-5d%3s%s\n",NR,(NR==L?">>>":""),$0 }' L=$1 $0
+}
+
+trap 'err_report $LINENO' ERR
+
 #echo "Entering variables.sh $PWD"
 ################################################################################
 ## VARIABLES - necessary update before 
@@ -95,7 +102,7 @@ function update_config()
 	rm -fv "$HOST_BUILD_DIR/.config"
 )
 
-print_supported() {
+function print_supported() {
 	case "$PRINTSUPPORTED" in
 		AUTOCONF|autoconf)  printf "%s\n" "$GCC_AUTOCONF_VERSION";;
 		BINUTILS|binutils)  printf "%s\n" "$BINUTILS_VERSION";;
