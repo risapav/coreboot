@@ -85,5 +85,6 @@ cd $DOCKER_BUILD_DIR
 make CPUS=$(nproc) 
 
 #ARCH=$ARCH obj="cb_build"
-	
+
+e_success "--> Exiting $0, work is done"	
 exit 0
