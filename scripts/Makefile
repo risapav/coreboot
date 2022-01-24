@@ -78,7 +78,7 @@ docker-shell: test-docker
 		-e COLUMNS=$(shell tput cols) -e LINES=$(shell tput lines) -e TERM=$(TERM) \
 		-w /home/coreboot \
 		--rm coreboot/coreboot-sdk:$(COREBOOT_IMAGE_TAG) \
-		/bin/bash -l
+		$(SCRIPT)
 		
 docker-build-coreboot: docker-run-local
 docker-build-coreboot: override DOCKER_RUN_LOCAL := \
