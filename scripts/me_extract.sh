@@ -53,4 +53,14 @@ if [ ! -f "$DOCKER_BUILD_DIR/3rdparty/blobs/mainboard/$MAINBOARD/$MODEL/gbe.bin"
   rm flashregion_1_bios.bin
 fi
 
+#######################
+##   build intelmetool   ##
+#######################
+cd "$DOCKER_BUILD_DIR/util/intelmetool"
+if [ ! -f "intelmetool" ]; then
+  e_note "Make intelmetool"
+  make
+  chmod +x intelmetool || exit
+fi
+
 exit 0
