@@ -199,5 +199,5 @@ else
   e_note "coreboot.rom and .config files are copied inside OUTPUT_DIR"
 fi
 
-e_success "--> Exiting build.sh, work is done"
+e_success "--> Exiting $0, work is done"
 exit 0
