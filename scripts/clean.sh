@@ -81,4 +81,5 @@ if [[ -n $CLEAN_DOCKER ]]; then
   fi
 fi
 
+e_success "--> Exiting $0, work is done"
 exit 0
