@@ -141,14 +141,6 @@ fi
 
 ### COREBOOT_CROSSGCC_PARAM=
 #cd $HOST_ROOT_DIR 
-#mkdir -p $HOST_CCACHE_DIR
-
-#if [[ $? -ne 0  ]]; then
-#  e_error "CCACHE_DIR does not exist !"
-#  exit 1
-#else
-#  e_success "CCACHE_DIR  exist..."
-#fi
 
 #if [[ $? -ne 0  ]]; then
 #	e_error "build_sdk.sh --> Docker SDK is not prepared !"
@@ -187,6 +179,7 @@ if [ "$TO_CONFIGURE" ]; then
   make -f $HOST_SCRIPT_DIR/Makefile docker-run-local SCRIPT="$DOCKER_SCRIPT_DIR/compile.sh $1" 
   exit 0
 fi
+e_success "pre build finished OK"
 
 ###
 e_header "pokus o kompilovanie"
@@ -196,11 +189,11 @@ e_header "pokus o kompilovanie"
 ### 
 e_header "post build parts"
 ## copy compilation results to out DIR, save config file
-if [ ! -f "$HOST_BUILD_DIR/coreboot.rom" ]; then
+if [ ! -f "$HOST_BUILD_DIR/build/coreboot.rom" ]; then
   e_error "coreboot.rom as output of compile is missing..."
   exit 1;
 else
-  cp -f "$HOST_BUILD_DIR/coreboot.rom" "$HOST_OUTPUT_DIR/coreboot.rom"
+  cp -f "$HOST_BUILD_DIR/build/coreboot.rom" "$HOST_OUTPUT_DIR/coreboot.rom"
   cp -f "$HOST_BUILD_DIR/.config" "$HOST_OUTPUT_DIR/latest.config"
   cp -f "$HOST_BUILD_DIR/defconfig" "$HOST_OUTPUT_DIR/defconfig"
   e_note "coreboot.rom and .config files are copied inside OUTPUT_DIR"
