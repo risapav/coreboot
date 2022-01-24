@@ -9,6 +9,8 @@ cd ~
 source ./scripts/variables.sh
 source ./scripts/utils.sh
 
+trap 'err_report $LINENO' ERR
+
 e_timestamp "Entering compile.sh $@"
 
 ## Iterate through command line parameters
