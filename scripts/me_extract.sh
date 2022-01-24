@@ -8,6 +8,8 @@ cd ~
 source ./scripts/variables.sh
 source ./scripts/utils.sh
 
+trap 'err_report $LINENO' ERR
+
 e_timestamp "Entering me_extract.sh $PWD $DOCKER_BUILD_DIR/util/ifdtool"
 
 #######################
