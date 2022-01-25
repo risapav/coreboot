@@ -193,9 +193,9 @@ if [ ! -f "$HOST_BUILD_DIR/build/coreboot.rom" ]; then
   e_error "coreboot.rom as output of compile is missing..."
   exit 1;
 else
-  cp -f "$HOST_BUILD_DIR/build/coreboot.rom" "$HOST_OUTPUT_DIR/coreboot.rom"
-  cp -f "$HOST_BUILD_DIR/.config" "$HOST_OUTPUT_DIR/latest.config"
-  cp -f "$HOST_BUILD_DIR/defconfig" "$HOST_OUTPUT_DIR/defconfig"
+  cp -f $HOST_BUILD_DIR/build/coreboot.rom $HOST_OUTPUT_DIR/coreboot.rom
+  cp -f $HOST_BUILD_DIR/.config $HOST_OUTPUT_DIR/latest.config
+  cp -f $HOST_BUILD_DIR/defconfig $HOST_OUTPUT_DIR/defconfig
   e_note "coreboot.rom and .config files are copied inside OUTPUT_DIR"
 fi
 

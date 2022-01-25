@@ -38,8 +38,10 @@ RUN \
 		g++ \
 		gawk \
 		gcc \
+		gettext \
 		git \
 		gnat \
+		gnulib \
 		golang \
 		graphviz \
 		lcov \
