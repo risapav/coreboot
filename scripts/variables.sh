@@ -27,15 +27,17 @@ export LOG_FILE="log.txt"
 
 export ARCH="i386" 
 ## maiboard vendor
-export MAINBOARD="lenovo"
+#export MAINBOARD="lenovo"
+export MAINBOARD="emulation"
 
 ## mainboard model
 #export MODEL="t410"
-export MODEL="t430"
+#export MODEL="t430"
+export MODEL="qemu-i440fx"
 
 ## original bios to extract ME from
 export STOCK_BIOS_ROM="stock_bios.bin"
-export VBIOS_ROM="vbios.bin"
+export VBIOS_ROM="vgabios.bin"
 
 ## picture 
 export BOOTSPLASH="bootsplash.jpg"
@@ -119,3 +121,4 @@ function print_supported() {
 	esac
 }
 
+#qemu.exe -L . -m 128 -bios coreboot.rom -hda linux.img -soundhw all -localtime -M pc

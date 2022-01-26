@@ -71,6 +71,9 @@ do
       -f | --flash)
         $HOST_SCRIPT_DIR/flash.sh 
         exit 0;;
+      -g | --grubh)
+        $HOST_SCRIPT_DIR/grub2.sh 
+        exit 0;;        
       -h | --help)
         usage
         print_supported
@@ -151,26 +154,34 @@ fi
 
 ###
 e_header "pre build parts"
-e_note "starting ME tool $HOST_ROOT_DIR"
-cd $HOST_ROOT_DIR
-make -f $HOST_SCRIPT_DIR/Makefile docker-run-local SCRIPT=$DOCKER_SCRIPT_DIR/me_extract.sh  
-e_success "ME extractor is done"
 
-###
-e_note "copying files from STOCK_BIOS_DIR"
-if [ -f "$HOST_STOCK_BIOS_DIR/$BOOTSPLASH" ]; then
-  cp "$HOST_STOCK_BIOS_DIR/$BOOTSPLASH" "$HOST_BUILD_DIR/$BOOTSPLASH"
-  e_success "Copied $BOOTSPLASH"
+name="emulation"
+ 
+if [ "$name" != $MAINBOARD ]; then
+  e_note "starting ME tool $HOST_ROOT_DIR"
+  cd $HOST_ROOT_DIR
+  make -f $HOST_SCRIPT_DIR/Makefile docker-run-local SCRIPT=$DOCKER_SCRIPT_DIR/me_extract.sh  
+  e_success "ME extractor is done"
+
+  ###
+  e_note "copying files from STOCK_BIOS_DIR"
+  if [ -f "$HOST_STOCK_BIOS_DIR/$BOOTSPLASH" ]; then
+    cp "$HOST_STOCK_BIOS_DIR/$BOOTSPLASH" "$HOST_BUILD_DIR/$BOOTSPLASH"
+    e_success "Copied $BOOTSPLASH"
+  else
+    e_warning "Missing $BOOTSPLASH which shoul be inside STOCK_BIOS_DIR> $(ls -la $HOST_BUILD_DIR)"
+  fi
+
+  if [ -f "$HOST_STOCK_BIOS_DIR/$VBIOS_ROM" ]; then
+    cp "$HOST_STOCK_BIOS_DIR/$VBIOS_ROM"  "$HOST_BUILD_DIR/$VBIOS_ROM"
+    e_success "Copied $VBIOS_ROM"
+  else
+    e_warning "Missing $VBIOS_ROM which shoul be inside STOCK_BIOS_DIR> $(ls -la $HOST_BUILD_DIR)"
+  fi
 else
-  e_warning "Missing $BOOTSPLASH which shoul be inside STOCK_BIOS_DIR> $(ls -la $HOST_BUILD_DIR)"
+    echo "Both Strings are Equal."
 fi
 
-if [ -f "$HOST_BUILD_DIR/$VBIOS_ROM" ]; then
-  cp "$HOST_BUILD_DIR/$VBIOS_ROM"  "$HOST_BUILD_DIR/$VBIOS_ROM"
-  e_success "Copied $VBIOS_ROM"
-else
-  e_warning "Missing $VBIOS_ROM which shoul be inside STOCK_BIOS_DIR> $(ls -la $HOST_BUILD_DIR)"
-fi
 
 ###
 if [ "$TO_CONFIGURE" ]; then
