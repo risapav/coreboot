@@ -19,6 +19,8 @@ coverage/
 output/*
 !output/*.sh
 
+util/*
+
 cb_build/*
 
 .bash_history

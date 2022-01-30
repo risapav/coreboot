@@ -116,12 +116,11 @@ fi
 ### check for coreboot-sdk
 if [ "$TO_BUILD_SDK" ]; then
   e_header "building docker container with toolchain"
-#  make docker-build-coreboot BUILD_CMD="/bin/bash -l"
-#        $SCRIPT_DIR/build_sdk.sh
-#  cd $ROOT_DIR/util/docker
   e_warning "$COREBOOT_CROSSGCC_PARAM"
   cd $HOST_ROOT_DIR 
+  git clone https://github.com/risapav/docker_coreboot util/docker/
   make -C $HOST_ROOT_DIR/util/docker coreboot-sdk COREBOOT_CROSSGCC_PARAM="$COREBOOT_CROSSGCC_PARAM"
+#  make -C $HOST_ROOT_DIR/util/docker coreboot-sdk COREBOOT_CROSSGCC_PARAM="$COREBOOT_CROSSGCC_PARAM"
   exit 0
 fi
 
@@ -154,10 +153,8 @@ fi
 
 ###
 e_header "pre build parts"
-
-name="emulation"
  
-if [ "$name" != $MAINBOARD ]; then
+if [ "emulation" != $MAINBOARD ]; then
   e_note "starting ME tool $HOST_ROOT_DIR"
   cd $HOST_ROOT_DIR
   make -f $HOST_SCRIPT_DIR/Makefile docker-run-local SCRIPT=$DOCKER_SCRIPT_DIR/me_extract.sh  
@@ -182,6 +179,12 @@ else
     echo "Both Strings are Equal."
 fi
 
+if [ -f "$HOST_STOCK_BIOS_DIR/grub.cfg" ]; then
+  cp "$HOST_STOCK_BIOS_DIR/grub.cfg"  "$HOST_BUILD_DIR/grub.cfg"
+  e_success "Copied grub.cfg"
+else
+  e_warning "Missing grub.cfg which shoul be inside STOCK_BIOS_DIR> $(ls -la $HOST_BUILD_DIR)"
+fi
 
 ###
 if [ "$TO_CONFIGURE" ]; then

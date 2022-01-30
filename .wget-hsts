@@ -1,4 +1,4 @@
 # HSTS 1.0 Known Hosts database for GNU Wget.
 # Edit at your own risk.
 # <hostname>	<port>	<incl. subdomains>	<created>	<max-age>
-mirror.fsf.org	0	1	1643138189	63072000
+mirror.fsf.org	0	1	1643462566	63072000

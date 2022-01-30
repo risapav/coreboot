@@ -27,13 +27,14 @@ export LOG_FILE="log.txt"
 
 export ARCH="i386" 
 ## maiboard vendor
-#export MAINBOARD="lenovo"
-export MAINBOARD="emulation"
+export MAINBOARD="lenovo"
+#export MAINBOARD="emulation"
 
 ## mainboard model
 #export MODEL="t410"
 #export MODEL="t430"
-export MODEL="qemu-i440fx"
+export MODEL="x220"
+#export MODEL="qemu-i440fx"
 
 ## original bios to extract ME from
 export STOCK_BIOS_ROM="stock_bios.bin"

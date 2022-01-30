@@ -115,13 +115,6 @@ RUN \
 	echo "export SDK_COMMIT={{DOCKER_COMMIT}}" >> /home/coreboot/.bashrc && \	
 	rm -rf /tmp/coreboot
 	
-#	cd /tmp/coreboot/util/xcompile && \
-#	./xcompile /opt/xgcc/bin > /home/coreboot/.xcompile && \	
-#  cd /opt/xgcc/bin && \
-#	for t in $(find . -type f -name *gcc*); do ln -vs /usr/bin/ccache /usr/local/bin/$t; done && \
-#	for t in $(find . -type f -name *cpp*); do ln -vs /usr/bin/ccache /usr/local/bin/$t; done && \
-#	rm -rf /tmp/coreboot
-
 ENV PATH $PATH:/opt/xgcc/bin
 ENV SDK_VERSION={{SDK_VERSION}}
 ENV SDK_COMMIT={{DOCKER_COMMIT}}
@@ -144,27 +137,4 @@ USER coreboot
   ### && \
   ### make -C coreboot CPUS=$(nproc) test-abuild
 
-### RUN \
-###  cd /tmp/work && \
-###  make -C coreboot olddefconfig && \
-###  make -C coreboot all -j && \
-##  make -C coreboot printall && \
-##  make -C coreboot filelist && \
-##  make -C coreboot ctags-project && \
-##  make -C coreboot cscope-project
-
-## RUN \
-##  cd /tmp/work && \
-##  make -C coreboot doxygen -j
-
-#RUN \
-#  cd /tmp/work && \
-#  make -C coreboot test-payloads&& \
-#  make -C coreboot test-tools -j && \
-#  make -C coreboot test-lint -j && \
-#  make -C coreboot test-cleanup -j && \
-#  cd && \
-#  rm -rf /tmp/work/
-
-# FROM coreboot-sdk
-# VOLUME /home/coreboot
+VOLUME /home/coreboot
