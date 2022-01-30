@@ -1,5 +1,3 @@
-*/build/*
-
 stock_bios/*
 !stock_bios/*.sh
 
@@ -12,6 +10,7 @@ coverage/
 !.vscode/settings.json.default
 *.code-workspace
 
+# cache to speed up compilation
 */.ccache/
 */ccache/
 */.config/
@@ -19,8 +18,11 @@ coverage/
 output/*
 !output/*.sh
 
-util/*
+# dockerfile coreboot-sdk
+util/
 
-cb_build/*
+# build dir
+cb_build/
+*/build/
 
 .bash_history
