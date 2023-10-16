@@ -15,8 +15,11 @@ trap 'err_report $LINENO' ERR
 ################################################################################
 export DOCKER_CONTAINER_NAME="coreboot/coreboot-sdk"
 
-export COREBOOT_IMAGE_TAG="2021-12-29_ce134ababd"
-export DOCKER_COMMIT="e565f75221"
+export COREBOOT_IMAGE_TAG="2023-06-04_44f676afc9"
+#export DOCKER_COMMIT="e565f75221"
+export DOCKER_COMMIT="d5180b7c3afd"
+export DOCKER_TAG="2023-06-04_44f676afc9"
+
 export COREBOOT_CROSSGCC_PARAM="build-arm build-riscv build-i386 build-x64 build_gcc build_iasl build_nasm"
 
 ## log file

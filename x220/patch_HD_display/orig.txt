@@ -1,0 +1,112 @@
+	signature: <$VBT SANDYBRIDGE-M  >
+	version: 1.00
+	VBT size: 0xf91
+	VBT checksum: 0x3a
+	BDB version: 1.61
+	section type 254, size 0xea
+		type: 0
+		relstage: 64
+		chipset: 1
+		LVDS
+		No TV
+		rsvd3[0]: 0x12
+		rsvd3[1]: 0xd
+		rsvd3[2]: 0x32
+		rsvd3[3]: 0x30
+		Signon: 89Intel(R)Sandybridge Mobile PCI Accelerated SVGA BIOS
+Build Number: DB20895 PC 14.34  10/30/2010  03:43:33
+DECOMPILATION OR DISASSEMBLY PROHIBITED
+
+		Copyright: 
+		Code segment: a
+		DOS Boot mode: 0
+		Bandwidth percent: c0
+		rsvd4: 0x3
+		Bandwidth percent: 8
+		rsvd5: 0x4
+	section type 1, size 0x5
+	General features:
+		panel_fitting = 0x3
+		flexaim = 0x1
+		download_ext_vbt = 0x1
+		*enable_ssc = 0x0
+		*ssc_freq = 0x0
+		*display_clock_mode = 0x0
+		disable_smooth_vision = 0x0
+		*fdi_rx_polarity_inverted = 0x0
+		rsvd10 = 0x4
+		legacy_monitor_detect = 0x1
+		*int_crt_support = 0x1
+		*int_tv_support = 0x0
+		dp_ssc_enb = 0x1
+	section type 253, size 0x32
+	section type 2, size 0x10d
+		*CRT DDC GMBUS pin: 2
+		DPMS ACPI: 0
+		Skip boot CRT detect: 0
+		DPMS aim: 1
+		boot_display: { 0, 0 }
+		8 devices
+		*device type: 1022 	(flat panel)
+		 *dvo_port: 4
+		 *i2c_pin: 0
+		 *slave_addr: 0
+		 *ddc_pin: 3
+		 *dvo_wiring: 0
+		 edid_ptr: 0
+		*device type: 60d6 	(Unknown)
+		 *dvo_port: 7
+		 *i2c_pin: 0
+		 *slave_addr: 0
+		 *ddc_pin: 5
+		 *dvo_wiring: 1
+		 edid_ptr: 0
+		*device type: 60d6 	(Unknown)
+		 *dvo_port: 8
+		 *i2c_pin: 0
+		 *slave_addr: 0
+		 *ddc_pin: 4
+		 *dvo_wiring: 2
+		 edid_ptr: 0
+		*device type: 60d6 	(Unknown)
+		 *dvo_port: 9
+		 *i2c_pin: 0
+		 *slave_addr: 0
+		 *ddc_pin: 6
+		 *dvo_wiring: 3
+		 edid_ptr: 0
+		*device type: 0 	(Empty)
+		*device type: 0 	(Empty)
+		*device type: 0 	(Empty)
+		*device type: 0 	(Empty)
+	section type 3, size 0x1
+	section type 4, size 0x1c
+	section type 252, size 0xae
+	section type 6, size 0x5d
+	section type 7, size 0x7
+	section type 8, size 0x3d
+	section type 10, size 0xcb
+	section type 11, size 0xc7
+	section type 12, size 0x13
+		*LVDS config: 1
+		*Dual frequency: 1
+	section type 13, size 0x3
+	section type 14, size 0x9
+	section type 15, size 0x8b
+	section type 16, size 0x84
+	section type 17, size 0x8
+	section type 18, size 0xc
+	section type 19, size 0x20
+	section type 20, size 0x9e
+	section type 22, size 0x4b
+		*Panel type: 3
+	section type 23, size 0x48
+	section type 24, size 0x28
+	section type 25, size 0x28
+	section type 26, size 0x2
+	section type 27, size 0xc8
+	section type 40, size 0x18
+	section type 41, size 0x94
+	section type 42, size 0x4f0
+	section type 43, size 0x61
+	section type 44, size 0x15

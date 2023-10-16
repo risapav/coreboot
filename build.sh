@@ -117,10 +117,10 @@ fi
 if [ "$TO_BUILD_SDK" ]; then
   e_header "building docker container with toolchain"
   e_warning "$COREBOOT_CROSSGCC_PARAM"
-  cd $HOST_ROOT_DIR 
-  git clone https://github.com/risapav/docker_coreboot util/docker/
-  make -C $HOST_ROOT_DIR/util/docker coreboot-sdk COREBOOT_CROSSGCC_PARAM="$COREBOOT_CROSSGCC_PARAM"
-#  make -C $HOST_ROOT_DIR/util/docker coreboot-sdk COREBOOT_CROSSGCC_PARAM="$COREBOOT_CROSSGCC_PARAM"
+###  cd $HOST_ROOT_DIR 
+###  git clone https://github.com/risapav/docker_coreboot util/docker/
+###  make -C $HOST_ROOT_DIR/util/docker coreboot-sdk COREBOOT_CROSSGCC_PARAM="$COREBOOT_CROSSGCC_PARAM"
+  docker pull coreboot/coreboot-sdk:$DOCKER_TAG
   exit 0
 fi
 
@@ -140,16 +140,6 @@ if [[ -z $(ls -A $HOST_BUILD_DIR) ]]; then
 else
    e_success "Coreboot Framework is not neccessary to clone..."
 fi
-
-### COREBOOT_CROSSGCC_PARAM=
-#cd $HOST_ROOT_DIR 
-
-#if [[ $? -ne 0  ]]; then
-#	e_error "build_sdk.sh --> Docker SDK is not prepared !"
-#	exit 1
-#else
-#  e_success "build_sdk.sh --> Docker SDK is prepared..."
-#fi
 
 ###
 e_header "pre build parts"
@@ -176,7 +166,7 @@ if [ "emulation" != $MAINBOARD ]; then
     e_warning "Missing $VBIOS_ROM which shoul be inside STOCK_BIOS_DIR> $(ls -la $HOST_BUILD_DIR)"
   fi
 else
-    echo "Both Strings are Equal."
+  e_warning "Emulation selected, therefore not neccessary use ME TOOLS..."
 fi
 
 if [ -f "$HOST_STOCK_BIOS_DIR/grub.cfg" ]; then
