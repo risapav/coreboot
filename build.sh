@@ -5,11 +5,15 @@
 # set -xe
 set -e
 
-# import variabl
+# import variables
 source ./scripts/variables.sh
 source ./scripts/utils.sh
 
 e_timestamp "Entering build.sh"
+
+## Parse available models from directory names
+AVAILABLE_MODELS=$(find ./ -maxdepth 1 -mindepth 1 -type d | sed  's/\.\///g' | grep -Ev "common|git|spec|coverage" | sort)
+
 
 ## Help menu
 usage()
@@ -24,7 +28,6 @@ usage()
   echo "  -cc, --clean-config          Purge config in build directory"
   echo "  -cd, --clean-docker          Purge docker image Coreboot-sdk"
   echo "  --bleeding-edge              Build from the latest commit"
-  echo "  --clean-slate                Purge previous build directory and config"
   echo "  -c, --commit <commit>        Git commit hash"
   echo "  -f, --flash                  Flash BIOS if build is successful"
   echo "  -h, --help                   Show this help"
@@ -44,33 +47,39 @@ usage()
 while :
 do
     case "$1" in
+      #Install docker image Coreboot-sdk
       -bd | --build-sdk)  
         TO_BUILD_SDK=true
         break;;      
+      # Purge ALL--> -cb -cc -cd together, total wipe out
       -ca | --clean-all)  
         $HOST_SCRIPT_DIR/clean.sh -ca
         exit 0;;       
+      # Purge build directory
       -cb | --clean-build)  
         $HOST_SCRIPT_DIR/clean.sh -cb
         exit 0;;      
+      # Purge config in build directory
       -cc | --clean-config) 
         $HOST_SCRIPT_DIR/clean.sh -cc
         exit 0;;
+      # Purge docker image Coreboot-sdk
       -cd | --clean-docker) 
         $HOST_SCRIPT_DIR/clean.sh -cd
         exit 0;;
+      # Build from the latest commit
       --bleeding-edge)
         COREBOOT_COMMIT="master"
         shift 1;;
-      --clean-slate)
-        CLEAN_SLATE=true
-        shift 1;;
+      # Git commit hash
       -c | --commit)
         COREBOOT_COMMIT="$2"
         shift 2;;
+      # Flash BIOS if build is successful
       -f | --flash)
         $HOST_SCRIPT_DIR/flash.sh 
         exit 0;;
+      #??
       -g | --grubh)
         $HOST_SCRIPT_DIR/grub2.sh 
         exit 0;;        
@@ -84,11 +93,13 @@ do
       -t | --tag)
         COREBOOT_TAG="$2"
         shift 2;;
+      -s | --supported)		
+        PRINTSUPPORTED="$1"
+        shift;;
       -*)
         e_error "Error: Unknown option: $1" >&2
         usage >&2
         exit 1;;
-      -s|--supported)		shift; PRINTSUPPORTED="$1"; shift;;
       *)
         break;;
     esac
@@ -97,6 +108,7 @@ done
 ###
 if [ -n "$PRINTSUPPORTED" ]; then
   print_supported
+  echo "koniec ..."
   exit 0
 fi
 
@@ -131,7 +143,7 @@ if [[ -z $(ls -A $HOST_BUILD_DIR) ]]; then
   cd $HOST_ROOT_DIR 
   git clone https://review.coreboot.org/coreboot $HOST_BUILD_DIR/
 	cd $HOST_BUILD_DIR
-	git checkout $DOCKER_COMMIT
+	git checkout $COREBOOT_COMMIT
   git clone https://github.com/coreboot/blobs.git 3rdparty/blobs/ 
   git clone https://github.com/coreboot/intel-microcode.git 3rdparty/intel-microcode/ 
   git submodule update --init --recursive 
@@ -180,12 +192,15 @@ fi
 if [ "$TO_CONFIGURE" ]; then
   e_note "starting configurator of .config inside $PWD"		
   cd $HOST_ROOT_DIR
-  make -f $HOST_SCRIPT_DIR/Makefile docker-run-local SCRIPT="$DOCKER_SCRIPT_DIR/compile.sh $1" 
+  make -f $HOST_SCRIPT_DIR/Makefile docker-run-local SCRIPT="$DOCKER_SCRIPT_DIR/compile.sh $1"
+  cp -f $HOST_BUILD_DIR/defconfig $HOST_OUTPUT_DIR/defconfig
   exit 0
 fi
 e_success "pre build finished OK"
 
-###
+################################################################################
+# pokus o kompilovanie
+################################################################################
 e_header "pokus o kompilovanie"
   cd $HOST_ROOT_DIR
   make -f $HOST_SCRIPT_DIR/Makefile docker-run-local SCRIPT="$DOCKER_SCRIPT_DIR/compile.sh"
@@ -199,7 +214,7 @@ if [ ! -f "$HOST_BUILD_DIR/build/coreboot.rom" ]; then
 else
   cp -f $HOST_BUILD_DIR/build/coreboot.rom $HOST_OUTPUT_DIR/coreboot.rom
   cp -f $HOST_BUILD_DIR/.config $HOST_OUTPUT_DIR/latest.config
-  cp -f $HOST_BUILD_DIR/defconfig $HOST_OUTPUT_DIR/defconfig
+  cp -f $HOST_BUILD_DIR/.config $HOST_OUTPUT_DIR/defconfig
   e_note "coreboot.rom and .config files are copied inside OUTPUT_DIR"
 fi
 

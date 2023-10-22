@@ -33,12 +33,14 @@ do
 done
 
 #clean config
+# Purge config in build directory
 if [[ -n $CLEAN_CONFIG ]]; then
   rm -f $HOST_BUILD_DIR/.config
   e_success "$HOST_BUILD_DIR/.config erased $?"
 fi		
 
 #clean build
+# Purge build directory
 if [[ -n $CLEAN_BUILD ]]; then
   #remove all files, include hidden files, no prompt
   #rm -rf $HOST_BUILD_DIR/{*,.*}
@@ -47,6 +49,7 @@ if [[ -n $CLEAN_BUILD ]]; then
 fi
 
 #clear docker
+# Purge docker image Coreboot-sdk
 if [[ -n $CLEAN_DOCKER ]]; then
   # check for running docker
   if ! docker info > /dev/null 2>&1; then

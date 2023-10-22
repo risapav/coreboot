@@ -68,6 +68,7 @@ fi
     
 
 ################
+##  Note:  prepare defconfig 
 ##  Config   ##
 ###############
 e_note "prepare defconfig"
